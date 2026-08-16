@@ -1,4 +1,5 @@
 # Mr Rage Bait
+![Mr Rage Bait logo](assets/mr-rage-bait-logo.svg)
 
 **Built by QJ MOTSAMAI.**
 
