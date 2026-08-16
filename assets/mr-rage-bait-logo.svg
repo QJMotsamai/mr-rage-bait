@@ -1,0 +1,10 @@
+<svg width="1200" height="500" viewBox="0 0 1200 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="500" rx="32" fill="#09090C"/>
+  <path d="M123 126C165 77 240 75 278 122C313 166 300 238 254 271C223 293 187 292 160 315C137 335 129 367 121 400C92 361 79 315 91 273C105 224 127 186 123 126Z" fill="#C7FF3D"/>
+  <path d="M164 147C187 126 224 132 239 156C253 180 246 211 220 230C196 247 169 247 151 266C153 222 177 190 164 147Z" fill="#09090C"/>
+  <text x="345" y="220" fill="#F7F7F3" font-family="Arial, Helvetica, sans-serif" font-size="98" font-weight="900" letter-spacing="-4">MR RAGE</text>
+  <text x="345" y="316" fill="#C7FF3D" font-family="Arial, Helvetica, sans-serif" font-size="98" font-weight="900" letter-spacing="-4">BAIT</text>
+  <line x1="349" y1="354" x2="1072" y2="354" stroke="#30303A" stroke-width="2"/>
+  <text x="349" y="401" fill="#A4A4B4" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="5">BLUNT ANSWERS. MINIMAL PATIENCE.</text>
+  <text x="349" y="448" fill="#777784" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="3">BUILT BY QJ MOTSAMAI</text>
+</svg>
