@@ -1,46 +1,90 @@
-# Mr Rage Bait
-![Mr Rage Bait logo](assets/mr-rage-bait-logo.svg)
+<div align="center">
+  <img src="assets/mr-rage-bait-logo.svg" alt="Mr Rage Bait" width="720" />
 
-**Built by QJ MOTSAMAI.**
+  <p><strong>A sharp, character-led Gemini chatbot with an extreme parody persona.</strong></p>
 
-A deployable 3D-avatar chatbot with an opt-in sharp, deadpan parody tone. It is designed for playful banter, not escalating or targeting people who are genuinely upset. The browser talks only to this app's `/api/chat` endpoint; the Gemini key remains on the server.
+  <p>
+    <a href="https://mr-rage-bait.onrender.com/">Live demo</a> ·
+    <a href="https://www.linkedin.com/in/qj-motsamai-955596421">LinkedIn</a> ·
+    <a href="https://youtube.com/@qjmotsamai">YouTube</a>
+  </p>
+</div>
 
-> **Cost note**: Render's free web service and Gemini's free quota are subject to each provider's limits and changes. They are suitable for a personal prototype, not a "free forever" guarantee. A custom domain also costs money.
+---
+
+## Meet Mr Rage Bait
+
+**Mr Rage Bait** is a web-based AI character experience that combines direct Gemini-powered conversation with a stylised character interface, dry humour, and deliberately unnecessary attitude.
+
+It is designed as an **opt-in parody experience**: useful answers first, then the character’s deadpan commentary. The product does not expose the Gemini key to the browser and keeps API requests behind a server-side endpoint.
+
+> “Ask your question. Make it worth the processing power.”
+
+## Built by QJ MOTSAMAI
+
+Mr Rage Bait was conceived, designed, and built by **QJ MOTSAMAI**.
+
+- **LinkedIn:** [QJ Motsamai](https://www.linkedin.com/in/qj-motsamai-955596421)
+- **YouTube:** [@qjmotsamai](https://youtube.com/@qjmotsamai)
+- **Live product:** [mr-rage-bait.onrender.com](https://mr-rage-bait.onrender.com/)
+
+## Highlights
+
+- Character-led chat UI featuring **Amani**
+- Gemini-powered server-side chat
+- Extreme-mode parody persona
+- `⚡ Rage Me` prompt generator
+- `↺ Rage Refund` conversation reset
+- Attachment-ready chat interface for supported images and documents
+- Responsive mobile-first design
+- Render deployment configuration included
+
+## Stack
+
+| Layer | Technology |
+| --- | --- |
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Node.js + Express |
+| AI | Google Gemini API |
+| File parsing | Multer + Mammoth |
+| Hosting | Render |
 
 ## Run locally
 
-1. Install Node 20+.
-2. Copy `.env.example` to `.env` and put in a Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
-3. Run:
+### 1. Install dependencies
 
 ```bash
 npm install
-set -a; source .env; set +a
+```
+
+### 2. Create a `.env` file
+
+```bash
+GEMINI_API_KEY=your_google_ai_studio_key
+GEMINI_MODEL=gemini-3.1-flash-lite
+```
+
+### 3. Start the app
+
+```bash
 npm start
 ```
 
-Open `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Deploy to Render
+## Deploy on Render
 
-1. Create a new empty GitHub repository called `mr-rage-bait`.
-2. Push this folder using the commands below.
-3. In Render, choose **New → Blueprint**, connect the repository, and select it. Render will read `render.yaml`.
-4. Add a secret environment variable named `GEMINI_API_KEY` with your key. Do **not** add it to GitHub.
-5. Deploy. Render supplies the public URL.
+1. Fork or deploy this repository through Render.
+2. Add `GEMINI_API_KEY` under the Render service’s **Environment Variables**.
+3. Optional: set `GEMINI_MODEL` to `gemini-3.1-flash-lite`.
+4. Deploy.
 
-## GitHub commands
+**Never commit API keys to GitHub.**
 
-```bash
-cd mr-rage-bait
-git init
-git add .
-git commit -m "Build Mr Rage Bait chatbot"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/mr-rage-bait.git
-git push -u origin main
-```
+## License and ownership
 
-## Change the personality
+Copyright © 2026 **QJ MOTSAMAI**. All rights reserved.
 
-Edit the `SYSTEM` constant in `server.js`. Keep the answer-quality instruction early in the prompt: personality should not replace a helpful answer.
+This repository is publicly viewable for portfolio and demonstration purposes. It is **not open source** and no permission is granted to copy, redistribute, commercialise, or create derivative works from this code, design, brand, or character assets without written permission from QJ Motsamai.
+
+See [LICENSE](LICENSE) for the full terms.
