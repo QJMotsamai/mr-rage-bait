@@ -819,16 +819,17 @@ button{cursor:pointer}
     <button class="close" type="button" data-close="payOverlay" aria-label="Close">×</button>
     <div class="eyebrow">Pro</div>
     <h2 id="payTitle">Unlimited access to my limited patience.</h2>
-    <div class="price" id="payPrice">R89 <span>/ month</span></div>
+    <div class="price" id="payPrice">R89 <span>/ 30 days</span></div>
     <ul class="perks">
-      <li>Unlimited messages</li>
-      <li>Three Pro themes: Acid Noir, Red Alert, Midnight Blue</li>
-      <li>Charged in your local currency via Paystack</li>
+      <li>Unlimited messages for 30 days</li>
+      <li>All five themes, including Rose Riot and High Voltage</li>
+      <li>The full cast: Amani, Zola and Neo</li>
+      <li>One payment. No card stored, no auto-renewal.</li>
     </ul>
-    <p id="payCopy">You will be charged in your local currency. The finance app will see it is you, not a random tab.</p>
+    <p id="payCopy">One payment in your local currency. Pro lasts 30 days, then your account goes back to free on its own.</p>
     <div class="error" id="payError"></div>
     <button class="primary" id="payStart" type="button">Continue to checkout</button>
-    <p class="fine">Cancel anytime. Payments are processed by Paystack. Card details never touch this server. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
+    <p class="fine">Nothing to cancel — the pass simply ends after 30 days. Paystack processes the payment; your card details never touch this server and nothing is saved for future charges. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
   </div>
 </div>
 
@@ -956,10 +957,10 @@ function bindAccount(){
 function paintPrice(){
   const quote=me?.pricing;
   if(!quote) return;
-  document.querySelector('#payPrice').innerHTML=`${quote.label} <span>/ month</span>`;
+  document.querySelector('#payPrice').innerHTML=`${quote.label} <span>/ 30 days</span>`;
   document.querySelector('#payCopy').textContent=quote.ready
-    ? `Charged in ${quote.currency} through Paystack. They will see your email and this exact amount.`
-    : `This will be ${quote.label} in ${quote.currency}. Add a free Paystack key to take the money. Your interest is still logged.`;
+    ? `One payment of ${quote.label} in ${quote.currency} through Paystack. Pro lasts 30 days, then your account returns to free on its own. Your card is not stored and you will not be charged again.`
+    : `This will be ${quote.label} in ${quote.currency} for a 30-day pass. Add a free Paystack key to take the money. Your interest is still logged.`;
 }
 function paintThemes(){
   const current=me?.theme||'acid';
