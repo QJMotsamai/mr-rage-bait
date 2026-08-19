@@ -1,21 +1,444 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="acid">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mr Rage Bait</title>
+<meta name="description" content="A blunt Gemini chatbot with unnecessary attitude. Built by QJ MOTSAMAI.">
 <style>
-:root{--bg:#0b0b0e;--panel:#121217;--panel2:#19191f;--line:#2d2d36;--text:#f5f5f1;--muted:#9a9aa8;--acid:#c9ff3d;--danger:#ff6860}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{width:min(1180px,100%);height:100dvh;margin:auto;display:grid;grid-template-columns:410px 1fr;border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--panel)}
-.profile{position:relative;min-height:0;background:radial-gradient(circle at 50% 30%,#253015 0,#121217 54%,#0b0b0e 100%);border-right:1px solid var(--line);overflow:hidden;isolation:isolate}.brand{position:absolute;z-index:3;top:22px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between}.identity{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.1em;font-size:14px}.logo{width:31px;height:31px;display:grid;place-items:center;background:var(--acid);color:#13150d;transform:rotate(-8deg);font-weight:950}.status{font-size:10px;letter-spacing:.1em;color:#bbbcc5;text-transform:uppercase}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 12px var(--acid);margin-right:6px}.portrait{position:absolute;inset:54px 0 86px;width:100%;height:calc(100% - 140px);object-fit:contain;object-position:center bottom;z-index:1;filter:contrast(1.04);transition:transform .35s ease,filter .35s ease;mix-blend-mode:screen}.portrait.react-annoyed{filter:saturate(.7) contrast(1.2)}.portrait.react-amused{filter:saturate(1.15)}.portrait.react-thinking{filter:brightness(.82)}.portrait.react-impressed{filter:brightness(1.12)}.profile-info{position:absolute;z-index:3;bottom:22px;left:22px;right:22px;padding:15px;border:1px solid #41414a;background:#0e0e12d9;backdrop-filter:blur(12px)}.profile-info strong{display:block;color:var(--acid);font-size:11px;letter-spacing:.12em;margin-bottom:5px}.profile-info p{font-size:13px;color:#c3c3ce;margin:0;line-height:1.45}.credit{font-size:10px!important;color:#797986!important;margin-top:7px!important}
-.chat{display:flex;flex-direction:column;min-width:0;min-height:0;background:#101015}.chat-head{padding:31px 34px 22px;border-bottom:1px solid var(--line)}.eyebrow{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--acid);text-transform:uppercase}.chat-head h1{font-size:28px;letter-spacing:-.06em;line-height:1.05;margin:10px 0 8px}.chat-head h1 span{color:#9999a7}.chat-head p{font-size:13px;color:var(--muted);margin:0}.messages{flex:1;overflow:auto;padding:25px 34px;display:flex;flex-direction:column;gap:13px}.msg{max-width:min(620px,88%);padding:12px 14px;font-size:14px;line-height:1.52;animation:enter .22s ease both}.bot{align-self:flex-start;background:#1b1b22;border:1px solid #2e2e38;border-radius:5px 15px 15px 15px}.user{align-self:flex-end;background:var(--acid);color:#14160e;border-radius:15px 5px 15px 15px;font-weight:650}.type{height:42px;display:flex;align-items:center;gap:5px}.type i{width:5px;height:5px;border-radius:50%;background:var(--acid);animation:blink .7s infinite alternate}.type i:nth-child(2){animation-delay:.15s}.type i:nth-child(3){animation-delay:.3s}.composer{padding:14px 24px 22px;border-top:1px solid var(--line);background:#121217}.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:11px}.tool,.spice{border:1px solid #363640;background:#1a1a20;color:#d7d7df;border-radius:7px;min-height:35px;padding:0 11px;font:800 11px inherit;letter-spacing:.04em;cursor:pointer}.tool:hover,.spice:hover{border-color:var(--acid);color:var(--acid)}.refund{margin-left:auto;color:#a0a0ad}.extreme{margin-left:auto;color:var(--acid);border:1px solid #567414;background:#1c2410;border-radius:7px;padding:9px 10px;font-size:10px;font-weight:900;letter-spacing:.08em}.attachment{display:none;align-items:center;gap:7px;margin:0 0 8px;padding:8px 10px;background:#1a1a20;border:1px solid #363640;border-radius:7px;font-size:11px;color:#c4c4cd}.attachment.show{display:flex}.attachment button{margin-left:auto;border:0;background:transparent;color:#b7b7c2;font-size:16px;cursor:pointer}.attach{width:36px;border:0;background:transparent;color:#c9ff3d;font-size:19px;cursor:pointer}.input-row{display:flex;gap:8px;padding:6px 6px 6px 14px;border:1px solid #3a3a44;background:#19191f;border-radius:8px}.input-row:focus-within{border-color:#a9d73c}input{flex:1;min-width:0;color:var(--text);background:transparent;border:0;outline:0;font:inherit;font-size:14px}input::placeholder{color:#777784}.send{border:0;border-radius:5px;width:40px;background:var(--acid);color:#10130a;font-size:19px;font-weight:900;cursor:pointer}.hint{font-size:10px;color:#737380;margin:9px 1px 0}45%{transform:translateY(-8px) rotate(.65deg) scale(1.012)}70%{transform:translateY(-4px) rotate(-.35deg) scale(1.006)}}@keyframes enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}@keyframes blink{to{opacity:.2;transform:translateY(-3px)}}
-@media(max-width:760px){body{background:#0b0b0e}.app{height:auto;min-height:100dvh;display:block;border:0}.profile{height:355px;border-right:0;border-bottom:1px solid var(--line)}.brand{top:18px;left:18px;right:18px}.portrait{inset:46px 0 70px;height:239px;object-position:center center}.profile-info{bottom:13px;left:18px;right:18px;padding:11px 13px}.profile-info p{font-size:12px}.chat{min-height:calc(100dvh - 355px)}.chat-head{padding:23px 20px 17px}.chat-head h1{font-size:25px}.messages{min-height:280px;padding:20px;gap:11px}.composer{padding:12px 14px 18px}.tools{gap:6px}.tool{padding:0 9px;font-size:10px}.refund{margin-left:0}.extreme{margin-left:auto;font-size:9px;padding:9px 7px}.msg{font-size:13px}}
-</style></head><body>
-<main class="app"><aside class="profile"><div class="brand"><div class="identity"><span class="logo">R</span>MR RAGE BAIT</div><div class="status" id="connectionStatus"><span class="dot"></span>Checking</div></div><img src="amani-blindfold-avatar.png" class="portrait" id="portrait" alt="Amani, Mr Rage Bait"><div class="profile-info"><strong>AMANI / ONLINE</strong><p>Blunt answers. Minimal patience.</p><p class="credit">Built by QJ MOTSAMAI</p></div></aside>
-<section class="chat"><header class="chat-head"><div class="eyebrow">Conversationally impatient assistant</div><h1>Ask a question. <span>Try not to make it obvious.</span></h1><p>Powered by Gemini. Direct answers with a little unnecessary attitude.</p></header><div class="messages" id="messages"><div class="msg bot">I’m Mr Rage Bait. Ask your question. Make it worth the processing power.</div></div><form class="composer" id="form"><div class="tools"><button type="button" class="tool" id="rageMe">⚡ RAGE ME</button><button type="button" class="tool refund" id="refund">↺ RAGE REFUND</button><span class="extreme">EXTREME MODE</span></div><input id="fileInput" type="file" hidden accept=".png,.jpg,.jpeg,.webp,.pdf,.txt,.docx"><div class="attachment" id="attachment"><span>📎</span><span id="fileName"></span><button type="button" id="clearFile" aria-label="Remove file">×</button></div><div class="input-row"><button class="attach" type="button" id="attach" aria-label="Attach image or document">📎</button><input id="input" autocomplete="off" maxlength="500" placeholder="Message Mr Rage Bait..."><button class="send" aria-label="Send">↑</button></div><div class="hint">Attach PNG, JPG, WebP, PDF, TXT, or DOCX — maximum 12 MB.</div></form></section></main>
+:root,html[data-theme="acid"]{
+  --bg:#0b0b0e;--panel:#121217;--panel2:#19191f;--line:#2d2d36;--text:#f5f5f1;--muted:#9a9aa8;
+  --acid:#c9ff3d;--danger:#ff6860;--ink:#13150d;--chat:#101015;--composer:#121217;
+  --glow:#253015;--pay-bg:#1c2410;--pay-line:#567414;--user-ink:#14160e;--sheet:#14141a;--hint:#9aa07a
+}
+html[data-theme="alert"]{
+  --bg:#0c0808;--panel:#160c0c;--panel2:#1e1010;--line:#3a2222;--text:#f7f1f1;--muted:#b09898;
+  --acid:#ff3b30;--danger:#ff8a80;--ink:#1a0707;--chat:#120909;--composer:#160c0c;
+  --glow:#3a1010;--pay-bg:#2a1010;--pay-line:#7a2420;--user-ink:#1a0707;--sheet:#1a0e0e;--hint:#c98884
+}
+html[data-theme="midnight"]{
+  --bg:#080a10;--panel:#0e1218;--panel2:#151a22;--line:#243044;--text:#eef3fb;--muted:#8b97ab;
+  --acid:#3d9eff;--danger:#ff6860;--ink:#061018;--chat:#0b0f16;--composer:#0e1218;
+  --glow:#102038;--pay-bg:#102033;--pay-line:#2a5a8a;--user-ink:#061018;--sheet:#10151d;--hint:#7f9ec4
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{width:min(1180px,100%);height:100dvh;margin:auto;display:grid;grid-template-columns:410px 1fr;border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--panel)}
+.profile{position:relative;min-height:0;background:radial-gradient(circle at 50% 30%,var(--glow) 0,var(--panel) 54%,var(--bg) 100%);border-right:1px solid var(--line);overflow:hidden;isolation:isolate}
+.brand{position:absolute;z-index:3;top:22px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between}
+.identity{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.1em;font-size:14px}
+.logo{width:31px;height:31px;display:grid;place-items:center;background:var(--acid);color:var(--ink);transform:rotate(-8deg);font-weight:950}
+.status{font-size:10px;letter-spacing:.1em;color:#bbbcc5;text-transform:uppercase}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 12px var(--acid);margin-right:6px}
+.portrait{position:absolute;inset:54px 0 86px;width:100%;height:calc(100% - 140px);object-fit:contain;object-position:center bottom;z-index:1;filter:contrast(1.04);transition:transform .35s ease,filter .35s ease;mix-blend-mode:screen}
+.portrait.react-annoyed{filter:saturate(.7) contrast(1.2)}
+.portrait.react-amused{filter:saturate(1.15)}
+.portrait.react-thinking{filter:brightness(.82)}
+.portrait.react-impressed{filter:brightness(1.12)}
+.profile-info{position:absolute;z-index:3;bottom:22px;left:22px;right:22px;padding:15px;border:1px solid var(--line);background:#0e0e12d9;backdrop-filter:blur(12px)}
+.profile-info strong{display:block;color:var(--acid);font-size:11px;letter-spacing:.12em;margin-bottom:5px}
+.profile-info p{font-size:13px;color:#c3c3ce;margin:0;line-height:1.45}
+.credit{font-size:10px!important;color:#797986!important;margin-top:7px!important}
+.chat{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--chat)}
+.chat-head{padding:24px 34px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.head-copy{min-width:0}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--acid);text-transform:uppercase}
+.chat-head h1{font-size:28px;letter-spacing:-.06em;line-height:1.05;margin:10px 0 8px}
+.chat-head h1 span{color:#9999a7}
+.chat-head p{font-size:13px;color:var(--muted);margin:0}
+.account-bar{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:7px;max-width:320px}
+.chip,.ghost,.pay{border:1px solid var(--line);background:var(--panel2);color:#d7d7df;border-radius:7px;min-height:32px;padding:0 10px;font:800 10px inherit;letter-spacing:.04em;cursor:pointer}
+.chip{cursor:default;color:#b7b7c2;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-flex;align-items:center}
+.ghost:hover,.pay:hover{border-color:var(--acid);color:var(--acid)}
+.pay{background:var(--pay-bg);border-color:var(--pay-line);color:var(--acid)}
+.pro-pill{background:var(--acid);color:var(--ink);border:0;font:900 10px inherit;letter-spacing:.08em;border-radius:7px;min-height:32px;padding:0 10px;display:inline-flex;align-items:center}
+.messages{flex:1;overflow:auto;padding:25px 34px;display:flex;flex-direction:column;gap:13px}
+.msg{max-width:min(620px,88%);padding:12px 14px;font-size:14px;line-height:1.52;animation:enter .22s ease both}
+.bot{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:5px 15px 15px 15px}
+.user{align-self:flex-end;background:var(--acid);color:var(--user-ink);border-radius:15px 5px 15px 15px;font-weight:650}
+.type{height:42px;display:flex;align-items:center;gap:5px}
+.type i{width:5px;height:5px;border-radius:50%;background:var(--acid);animation:blink .7s infinite alternate}
+.type i:nth-child(2){animation-delay:.15s}
+.type i:nth-child(3){animation-delay:.3s}
+.composer{padding:14px 24px 18px;border-top:1px solid var(--line);background:var(--composer)}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:11px}
+.tool,.spice{border:1px solid var(--line);background:var(--panel2);color:#d7d7df;border-radius:7px;min-height:35px;padding:0 11px;font:800 11px inherit;letter-spacing:.04em;cursor:pointer}
+.tool:hover,.spice:hover{border-color:var(--acid);color:var(--acid)}
+.refund{margin-left:auto;color:#a0a0ad}
+.extreme{margin-left:auto;color:var(--acid);border:1px solid var(--pay-line);background:var(--pay-bg);border-radius:7px;padding:9px 10px;font-size:10px;font-weight:900;letter-spacing:.08em}
+.attachment{display:none;align-items:center;gap:7px;margin:0 0 8px;padding:8px 10px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;font-size:11px;color:#c4c4cd}
+.attachment.show{display:flex}
+.attachment button{margin-left:auto;border:0;background:transparent;color:#b7b7c2;font-size:16px;cursor:pointer}
+.attach{width:36px;border:0;background:transparent;color:var(--acid);font-size:19px;cursor:pointer}
+.input-row{display:flex;gap:8px;padding:6px 6px 6px 14px;border:1px solid var(--line);background:var(--panel2);border-radius:8px}
+.input-row:focus-within{border-color:var(--acid)}
+input,button,textarea{font:inherit}
+#input{flex:1;min-width:0;color:var(--text);background:transparent;border:0;outline:0;font-size:14px}
+#input::placeholder{color:#777784}
+.send{border:0;border-radius:5px;width:40px;background:var(--acid);color:var(--ink);font-size:19px;font-weight:900;cursor:pointer}
+.hint{font-size:10px;color:#737380;margin:9px 1px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hint a{color:var(--hint);text-decoration:none}
+.hint a:hover{color:var(--acid)}
+.overlay{position:fixed;inset:0;background:#070709cc;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+.overlay.show{display:flex}
+.sheet{width:min(440px,100%);background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:22px;position:relative}
+.sheet.wide{width:min(560px,100%)}
+.sheet h2{margin:8px 0 8px;font-size:26px;letter-spacing:-.05em}
+.sheet p{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 14px}
+.sheet label{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;color:#8d8d9a;margin:0 0 6px}
+.sheet .field{width:100%;margin:0 0 11px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--text)}
+.sheet .primary{width:100%;border:0;border-radius:8px;background:var(--acid);color:var(--ink);font-weight:900;min-height:42px;cursor:pointer}
+.sheet .secondary{width:100%;margin:0 0 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--text);font-weight:800;min-height:42px;cursor:pointer}
+.sheet .close{position:absolute;top:12px;right:12px;border:0;background:transparent;color:#9a9aa8;font-size:22px;cursor:pointer}
+.sheet .fine{font-size:11px;color:#7d7d89}
+.sheet .fine a{color:var(--acid)}
+.sheet .error{color:#ff8b84;font-size:12px;min-height:18px;margin:0 0 8px}
+.price{font-size:34px;font-weight:900;letter-spacing:-.05em;margin:4px 0 2px}
+.price span{font-size:14px;color:#9a9aa8;font-weight:700}
+.perks{margin:0 0 14px;padding:0;list-style:none;font-size:13px;color:#d5d5dc}
+.perks li{margin:0 0 6px}
+.theme-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:0 0 12px}
+.theme-card{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:10px;color:var(--text);cursor:pointer}
+.theme-card.on{border-color:var(--acid);box-shadow:inset 0 0 0 1px var(--acid)}
+.theme-card.locked{opacity:.72}
+.swatch{height:48px;border-radius:8px;display:flex;overflow:hidden}
+.swatch i{flex:1}
+.theme-card strong{display:block;font-size:14px}
+.theme-card span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.lock{font-size:10px;font-weight:900;letter-spacing:.08em;color:#9a9aa8}
+@keyframes enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes blink{to{opacity:.2;transform:translateY(-3px)}}
+@media(max-width:760px){
+  body{background:var(--bg)}
+  .app{height:auto;min-height:100dvh;display:block;border:0}
+  .profile{height:355px;border-right:0;border-bottom:1px solid var(--line)}
+  .brand{top:18px;left:18px;right:18px}
+  .portrait{inset:46px 0 70px;height:239px;object-position:center center}
+  .profile-info{bottom:13px;left:18px;right:18px;padding:11px 13px}
+  .profile-info p{font-size:12px}
+  .chat{min-height:calc(100dvh - 355px)}
+  .chat-head{padding:18px 20px 14px;flex-direction:column}
+  .account-bar{max-width:none;justify-content:flex-start}
+  .chat-head h1{font-size:25px}
+  .messages{min-height:280px;padding:20px;gap:11px}
+  .composer{padding:12px 14px 16px}
+  .tools{gap:6px}
+  .tool{padding:0 9px;font-size:10px}
+  .refund{margin-left:0}
+  .extreme{margin-left:auto;font-size:9px;padding:9px 7px}
+  .msg{font-size:13px}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <aside class="profile">
+    <div class="brand">
+      <div class="identity"><span class="logo">R</span>MR RAGE BAIT</div>
+      <div class="status" id="connectionStatus"><span class="dot"></span>Checking</div>
+    </div>
+    <img src="amani-blindfold-avatar.png" class="portrait" id="portrait" alt="Amani, Mr Rage Bait">
+    <div class="profile-info">
+      <strong>AMANI / ONLINE</strong>
+      <p>Blunt answers. Minimal patience.</p>
+      <p class="credit">Built by QJ MOTSAMAI</p>
+    </div>
+  </aside>
+  <section class="chat">
+    <header class="chat-head">
+      <div class="head-copy">
+        <div class="eyebrow">Conversationally impatient assistant</div>
+        <h1>Ask a question. <span>Try not to make it obvious.</span></h1>
+        <p>Powered by Gemini. Direct answers with a little unnecessary attitude.</p>
+      </div>
+      <div class="account-bar" id="accountBar"></div>
+    </header>
+    <div class="messages" id="messages">
+      <div class="msg bot">I’m Mr Rage Bait. Ask your question. Make it worth the processing power.</div>
+    </div>
+    <form class="composer" id="form">
+      <div class="tools">
+        <button type="button" class="tool" id="rageMe">⚡ RAGE ME</button>
+        <button type="button" class="tool refund" id="refund">↺ RAGE REFUND</button>
+        <span class="extreme">EXTREME MODE</span>
+      </div>
+      <input id="fileInput" type="file" hidden accept=".png,.jpg,.jpeg,.webp,.pdf,.txt,.docx">
+      <div class="attachment" id="attachment">
+        <span>📎</span><span id="fileName"></span>
+        <button type="button" id="clearFile" aria-label="Remove file">×</button>
+      </div>
+      <div class="input-row">
+        <button class="attach" type="button" id="attach" aria-label="Attach image or document">📎</button>
+        <input id="input" autocomplete="off" maxlength="500" placeholder="Message Mr Rage Bait...">
+        <button class="send" aria-label="Send">↑</button>
+      </div>
+      <div class="hint">
+        <span>Attach PNG, JPG, WebP, PDF, TXT, or DOCX — maximum 12 MB.</span>
+        <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div class="overlay" id="authOverlay">
+  <div class="sheet" role="dialog" aria-labelledby="authTitle">
+    <button class="close" type="button" data-close="authOverlay" aria-label="Close">×</button>
+    <div class="eyebrow">Account</div>
+    <h2 id="authTitle">Sign in so I know who to bill.</h2>
+    <p>Same chatbot. You just stop being a mystery. Email is enough. Google is optional.</p>
+    <button class="secondary" id="googleBtn" type="button" hidden>Continue with Google</button>
+    <form id="authForm">
+      <label for="authEmail">EMAIL</label>
+      <input class="field" id="authEmail" type="email" required autocomplete="email">
+      <label for="authPassword">PASSWORD</label>
+      <input class="field" id="authPassword" type="password" required minlength="8" autocomplete="current-password">
+      <div class="error" id="authError"></div>
+      <button class="primary" id="authSubmit" type="submit">Sign in</button>
+    </form>
+    <p class="fine">New here? <a href="#" id="switchAuth">Create an account</a>. By continuing you agree to the <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>.</p>
+  </div>
+</div>
+
+<div class="overlay" id="payOverlay">
+  <div class="sheet" role="dialog" aria-labelledby="payTitle">
+    <button class="close" type="button" data-close="payOverlay" aria-label="Close">×</button>
+    <div class="eyebrow">Pro</div>
+    <h2 id="payTitle">Unlimited access to my limited patience.</h2>
+    <div class="price" id="payPrice">R89 <span>/ month</span></div>
+    <ul class="perks">
+      <li>Unlimited messages</li>
+      <li>Three Pro themes: Acid Noir, Red Alert, Midnight Blue</li>
+      <li>Charged in your local currency via Paystack</li>
+    </ul>
+    <p id="payCopy">You will be charged in your local currency. The finance app will see it is you, not a random tab.</p>
+    <div class="error" id="payError"></div>
+    <button class="primary" id="payStart" type="button">Continue to checkout</button>
+    <p class="fine">Cancel anytime. Payments are processed by Paystack. Card details never touch this server. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
+  </div>
+</div>
+
+<div class="overlay" id="themeOverlay">
+  <div class="sheet wide" role="dialog" aria-labelledby="themeTitle">
+    <button class="close" type="button" data-close="themeOverlay" aria-label="Close">×</button>
+    <div class="eyebrow">Pro themes</div>
+    <h2 id="themeTitle">Pick a mood. I already have one.</h2>
+    <p>Free users stay on Acid Noir. Paying users may choose a different colour of disappointment.</p>
+    <div class="theme-grid" id="themeGrid"></div>
+    <div class="error" id="themeError"></div>
+  </div>
+</div>
+
 <script>
-const messages=document.querySelector('#messages'),form=document.querySelector('#form'),input=document.querySelector('#input'),portrait=document.querySelector('#portrait'),status=document.querySelector('#connectionStatus'),fileInput=document.querySelector('#fileInput'),attachment=document.querySelector('#attachment'),fileName=document.querySelector('#fileName');let history=[],busy=false,spice='extreme',activity='chat',selectedFile=null;
-const rageQs=['Pineapple on pizza: culinary crime or proof you enjoy chaos?','Are voice notes communication, or an audio hostage situation?','Is cereal soup? Pick a side and accept the consequences.','Do you return the shopping trolley, or leave it to develop a personality?','Is a hotdog a sandwich? The wrong answer will be noted.'];const arcadeQs=['Defend this take: Water is overrated.','Defend this take: A hotdog is definitely a sandwich.','Defend this take: Slow Wi-Fi builds character.','Defend this take: Socks with sandals deserve respect.'];
-function add(text,who){let e=document.createElement('div');e.className='msg '+who;e.textContent=text;messages.append(e);messages.scrollTop=messages.scrollHeight;return e}function react(x='thinking'){portrait.className='portrait react-'+x;setTimeout(()=>portrait.className='portrait',900)}function wait(){let e=document.createElement('div');e.className='msg bot type';e.innerHTML='<i></i><i></i><i></i>';messages.append(e);messages.scrollTop=messages.scrollHeight;return e}
-async function check(){try{let r=await fetch('/api/status',{cache:'no-store'}),d=await r.json();status.innerHTML=d.ready?'<span class="dot"></span>Gemini ready':'<span class="dot" style="background:var(--danger)"></span>Add Gemini key'}catch{status.textContent='Offline'}}check();
-async function send(q){if(!q||busy)return;busy=true;input.disabled=true;add(q,'user');history.push({role:'user',text:q});input.value='';let loading=wait();react('thinking');try{let payload;if(selectedFile){payload=new FormData();payload.append('messages',JSON.stringify(history));payload.append('spice',spice);payload.append('activity',activity);payload.append('file',selectedFile)}else{payload=JSON.stringify({messages:history,spice,activity})}let r=await fetch('/api/chat',{method:'POST',headers:selectedFile?undefined:{'Content-Type':'application/json'},body:payload}),d=await r.json();if(!r.ok)throw Error(d.error||'The server had a problem.');loading.remove();add(d.text,'bot');history.push({role:'model',text:d.text});selectedFile=null;fileInput.value='';attachment.classList.remove('show');react('annoyed');activity='chat'}catch(e){loading.remove();add(e.message||'Something broke. Try again.','bot');react('annoyed')}finally{busy=false;input.disabled=false;input.focus()}}
-document.querySelector('#attach').onclick=()=>fileInput.click();fileInput.onchange=()=>{selectedFile=fileInput.files[0]||null;if(selectedFile){fileName.textContent=selectedFile.name;attachment.classList.add('show')}};document.querySelector('#clearFile').onclick=()=>{selectedFile=null;fileInput.value='';attachment.classList.remove('show')};form.addEventListener('submit',e=>{e.preventDefault();let q=input.value.trim();if(selectedFile&&!q)q='Read this attachment and respond in the selected tone.';send(q)});document.querySelector('#rageMe').onclick=()=>{activity='rage';add('⚡ RAGE ME: '+rageQs[Math.floor(Math.random()*rageQs.length)],'bot');add('Answer it. I’m listening against my better judgment.','bot');react('annoyed')};document.querySelector('#refund').onclick=()=>{history=[];activity='chat';messages.innerHTML='<div class="msg bot">Rage refunded. Your complaint has been ignored with great professionalism. Fresh start.</div>';react('amused')};
-</script></body></html>
+const messages=document.querySelector('#messages');
+const form=document.querySelector('#form');
+const input=document.querySelector('#input');
+const portrait=document.querySelector('#portrait');
+const status=document.querySelector('#connectionStatus');
+const fileInput=document.querySelector('#fileInput');
+const attachment=document.querySelector('#attachment');
+const fileName=document.querySelector('#fileName');
+const accountBar=document.querySelector('#accountBar');
+let history=[],busy=false,spice='extreme',activity='chat',selectedFile=null,me=null,googleOn=false,authMode='login';
+const locale=navigator.language||'en';
+const timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+const hint=()=>({locale,timezone});
+const themeMeta=[
+  {id:'acid',name:'Acid Noir',line:'Black + lime. The original.',colors:['#0b0b0e','#c9ff3d','#2d2d36']},
+  {id:'alert',name:'Red Alert',line:'Black + red. Less polite.',colors:['#0c0808','#ff3b30','#3a2222']},
+  {id:'midnight',name:'Midnight Blue',line:'Graphite + electric blue.',colors:['#080a10','#3d9eff','#243044']}
+];
+const rageQs=['Pineapple on pizza: culinary crime or proof you enjoy chaos?','Are voice notes communication, or an audio hostage situation?','Is cereal soup? Pick a side and accept the consequences.','Do you return the shopping trolley, or leave it to develop a personality?','Is a hotdog a sandwich? The wrong answer will be noted.'];
+
+function add(text,who){const e=document.createElement('div');e.className='msg '+who;e.textContent=text;messages.append(e);messages.scrollTop=messages.scrollHeight;return e}
+function react(x='thinking'){portrait.className='portrait react-'+x;setTimeout(()=>portrait.className='portrait',900)}
+function wait(){const e=document.createElement('div');e.className='msg bot type';e.innerHTML='<i></i><i></i><i></i>';messages.append(e);messages.scrollTop=messages.scrollHeight;return e}
+function show(id,on){document.getElementById(id).classList.toggle('show',on)}
+function applyTheme(id){
+  const theme=themeMeta.some(t=>t.id===id)?id:'acid';
+  document.documentElement.dataset.theme=theme;
+}
+async function api(url,opt={}){
+  const headers=Object.assign({'Content-Type':'application/json'},opt.headers||{});
+  if(opt.body instanceof FormData) delete headers['Content-Type'];
+  const r=await fetch(url,Object.assign({credentials:'include',headers},opt));
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw Object.assign(new Error(data.error||'The server had a problem.'),{status:r.status,data});
+  return data;
+}
+function renderAccount(){
+  if(!me){accountBar.innerHTML='<button class="ghost" id="openAuth">Sign in</button>';bindAccount();return}
+  const bits=[];
+  if(me.signedIn){
+    bits.push(`<span class="chip" title="${me.email}">${me.email}</span>`);
+    if(me.plan==='pro'){
+      bits.push('<span class="pro-pill">PRO</span>');
+      bits.push('<button class="ghost" id="openThemes">Themes</button>');
+    } else {
+      bits.push(`<span class="chip">${me.usage.remaining} left</span>`);
+      bits.push('<button class="ghost" id="openThemes">Themes</button>');
+      bits.push('<button class="pay" id="openPay">Upgrade</button>');
+    }
+    bits.push('<button class="ghost" id="signOut">Out</button>');
+  } else {
+    bits.push(`<span class="chip">${me.usage.remaining} guest left</span>`);
+    bits.push('<button class="ghost" id="openAuth">Sign in</button>');
+    bits.push('<button class="pay" id="openPay">Upgrade</button>');
+  }
+  accountBar.innerHTML=bits.join('');
+  bindAccount();
+}
+function bindAccount(){
+  const openAuth=document.querySelector('#openAuth');
+  const openPay=document.querySelector('#openPay');
+  const openThemes=document.querySelector('#openThemes');
+  const signOut=document.querySelector('#signOut');
+  if(openAuth) openAuth.onclick=()=>show('authOverlay',true);
+  if(openPay) openPay.onclick=openUpgrade;
+  if(openThemes) openThemes.onclick=openThemesheet;
+  if(signOut) signOut.onclick=async()=>{await api('/api/auth/logout',{method:'POST',body:'{}'}); me=await refresh();};
+}
+function paintPrice(){
+  const quote=me?.pricing;
+  if(!quote) return;
+  document.querySelector('#payPrice').innerHTML=`${quote.label} <span>/ month</span>`;
+  document.querySelector('#payCopy').textContent=quote.ready
+    ? `Charged in ${quote.currency} through Paystack. They will see your email and this exact amount.`
+    : `This will be ${quote.label} in ${quote.currency}. Add a free Paystack key to take the money. Your interest is still logged.`;
+}
+function paintThemes(){
+  const current=me?.theme||'acid';
+  const pro=me?.plan==='pro';
+  document.querySelector('#themeGrid').innerHTML=themeMeta.map(t=>`
+    <button type="button" class="theme-card ${current===t.id?'on':''} ${pro?'':'locked'}" data-theme-pick="${t.id}">
+      <div class="swatch">${t.colors.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
+      <div><strong>${t.name}</strong><span>${t.line}</span></div>
+      <div class="lock">${pro?(current===t.id?'ON':'USE'):'PRO'}</div>
+    </button>`).join('');
+  document.querySelectorAll('[data-theme-pick]').forEach(btn=>{
+    btn.onclick=()=>chooseTheme(btn.dataset.themePick);
+  });
+}
+async function chooseTheme(id){
+  const box=document.querySelector('#themeError');
+  box.textContent='';
+  if(me?.plan!=='pro'){show('themeOverlay',false);openUpgrade();return}
+  try{
+    const result=await api('/api/theme',{method:'POST',body:JSON.stringify({theme:id})});
+    me.theme=result.theme;
+    applyTheme(result.theme);
+    paintThemes();
+    add(id==='acid'?'Back to the original. Tasteful, for a given value of taste.':id==='alert'?'Red Alert. Try not to take that as a personality.':'Midnight Blue. Colder. Still not impressed.','bot');
+  }catch(err){box.textContent=err.message}
+}
+function openThemesheet(){
+  document.querySelector('#themeError').textContent='';
+  paintThemes();
+  show('themeOverlay',true);
+}
+async function refresh(){
+  me=await api('/api/presence',{method:'POST',body:JSON.stringify(hint())});
+  applyTheme(me.theme||'acid');
+  renderAccount();
+  paintPrice();
+  return me;
+}
+async function openUpgrade(){
+  if(!me?.signedIn){show('authOverlay',true);return}
+  document.querySelector('#payError').textContent='';
+  try{await api('/api/billing/intent',{method:'POST',body:JSON.stringify(hint())});}catch{}
+  paintPrice();
+  show('payOverlay',true);
+}
+async function check(){
+  try{
+    const d=await api('/api/status');
+    googleOn=Boolean(d.google);
+    document.querySelector('#googleBtn').hidden=!googleOn;
+    status.innerHTML=d.ready?'<span class="dot"></span>Gemini ready':'<span class="dot" style="background:var(--danger)"></span>Add Gemini key';
+  }catch{status.textContent='Offline'}
+  try{await refresh()}catch{renderAccount()}
+}
+async function send(q){
+  if(!q||busy)return;
+  busy=true;input.disabled=true;add(q,'user');history.push({role:'user',text:q});input.value='';
+  const loading=wait();react('thinking');
+  try{
+    let payload;
+    if(selectedFile){
+      payload=new FormData();
+      payload.append('messages',JSON.stringify(history));
+      payload.append('spice',spice);
+      payload.append('activity',activity);
+      payload.append('file',selectedFile);
+    }else payload=JSON.stringify({messages:history,spice,activity,...hint()});
+    const r=await fetch('/api/chat',{method:'POST',credentials:'include',headers:selectedFile?undefined:{'Content-Type':'application/json'},body:payload});
+    const d=await r.json();
+    if(!r.ok){
+      if(d.code==='quota'){
+        loading.remove();
+        add(d.error,'bot');
+        if(me) me.usage=d.usage;
+        renderAccount();
+        if(me?.signedIn) openUpgrade(); else show('authOverlay',true);
+        react('annoyed');
+        return;
+      }
+      throw Error(d.error||'The server had a problem.');
+    }
+    loading.remove();add(d.text,'bot');history.push({role:'model',text:d.text});
+    selectedFile=null;fileInput.value='';attachment.classList.remove('show');
+    if(d.usage){if(me) me.usage=d.usage;renderAccount()}
+    react('annoyed');activity='chat';
+  }catch(e){loading.remove();add(e.message||'Something broke. Try again.','bot');react('annoyed')}
+  finally{busy=false;input.disabled=false;input.focus()}
+}
+
+document.querySelector('#attach').onclick=()=>fileInput.click();
+fileInput.onchange=()=>{selectedFile=fileInput.files[0]||null;if(selectedFile){fileName.textContent=selectedFile.name;attachment.classList.add('show')}};
+document.querySelector('#clearFile').onclick=()=>{selectedFile=null;fileInput.value='';attachment.classList.remove('show')};
+form.addEventListener('submit',e=>{e.preventDefault();let q=input.value.trim();if(selectedFile&&!q)q='Read this attachment and respond in the selected tone.';send(q)});
+document.querySelector('#rageMe').onclick=()=>{activity='rage';add('⚡ RAGE ME: '+rageQs[Math.floor(Math.random()*rageQs.length)],'bot');add('Answer it. I’m listening against my better judgment.','bot');react('annoyed')};
+document.querySelector('#refund').onclick=()=>{history=[];activity='chat';messages.innerHTML='<div class="msg bot">Rage refunded. Your complaint has been ignored with great professionalism. Fresh start.</div>';react('amused')};
+document.querySelectorAll('[data-close]').forEach(btn=>btn.onclick=()=>show(btn.dataset.close,false));
+document.querySelector('#googleBtn').onclick=()=>{location.href='/api/auth/google'};
+document.querySelector('#switchAuth').onclick=e=>{
+  e.preventDefault();
+  authMode=authMode==='login'?'register':'login';
+  document.querySelector('#authTitle').textContent=authMode==='login'?'Sign in so I know who to bill.':'Create an account. Try not to use a joke email.';
+  document.querySelector('#authSubmit').textContent=authMode==='login'?'Sign in':'Create account';
+  document.querySelector('#switchAuth').textContent=authMode==='login'?'Create an account':'I already have an account';
+};
+document.querySelector('#authForm').onsubmit=async e=>{
+  e.preventDefault();
+  const box=document.querySelector('#authError');
+  box.textContent='';
+  try{
+    const body=JSON.stringify({email:document.querySelector('#authEmail').value,password:document.querySelector('#authPassword').value,...hint()});
+    me=await api(authMode==='login'?'/api/auth/login':'/api/auth/register',{method:'POST',body});
+    await refresh();
+    show('authOverlay',false);
+    add(authMode==='register'?'Account created. You are now a documented inconvenience.':'Signed in. I know who you are now. Disappointing, but useful.','bot');
+  }catch(err){box.textContent=err.message}
+};
+document.querySelector('#payStart').onclick=async()=>{
+  const box=document.querySelector('#payError');
+  box.textContent='';
+  try{
+    const result=await api('/api/billing/checkout',{method:'POST',body:JSON.stringify(hint())});
+    if(result.url){location.href=result.url;return}
+    box.textContent=result.message||'Interest logged. Payments are not live yet.';
+    add('I wrote your name down as someone willing to pay. Plug in Paystack when you want the money.','bot');
+  }catch(err){box.textContent=err.message}
+};
+
+const params=new URLSearchParams(location.search);
+if(params.get('upgraded')==='1') add('Pro unlocked. Themes are in the top right. Try not to pick red just because you are angry.','bot');
+if(params.get('checkout')==='cancel') add('Checkout cancelled. The willingness was noted anyway.','bot');
+if(params.get('signedin')==='1') add('Google let you in. I still have standards.','bot');
+if(params.get('auth')==='google_failed') add('Google sign-in failed. Use email, like a person from 2009.','bot');
+if(params.size) history.replaceState({},'',location.pathname);
+
+check();
+</script>
+</body>
+</html>
