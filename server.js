@@ -23,6 +23,7 @@ if (fs.existsSync(envFile)) {
 import { createStore } from './lib/store.js';
 import { countryFromRequest, quoteFor, publicQuote } from './lib/geo.js';
 import { normalizeTheme, resolvedTheme } from './lib/themes.js';
+import { normalizeCharacter, resolvedCharacter } from './lib/characters.js';
 import {
   createAuth, publicUser, normalizeEmail, validEmail,
   hashPassword, verifyPassword, parseCookies, randomToken, appendCookie
@@ -167,7 +168,8 @@ app.post('/api/auth/register', (req, res) => {
     createdAt: new Date().toISOString(),
     lastSeenAt: new Date().toISOString(),
     messageCountTotal: 0,
-    theme: 'acid'
+    theme: 'acid',
+    character: 'amani'
   });
   auth.createSession(res, user);
   store.addEvent({ userId: user.id, type: 'signup', country, currency: user.currency, provider: 'password' });
@@ -280,6 +282,23 @@ app.post('/api/theme', (req, res) => {
   res.json({ ok: true, theme: resolvedTheme(user) });
 });
 
+app.post('/api/character', (req, res) => {
+  const user = auth.currentUser(req);
+  if (!user) return res.status(401).json({ error: 'Sign in first.' });
+  const character = normalizeCharacter(req.body?.character);
+  if (!character) return res.status(400).json({ error: 'Unknown character.' });
+  if (user.plan !== 'pro') {
+    return res.status(402).json({
+      error: 'The rest of the cast is a Pro perk. Amani is free, and frankly enough for most people.',
+      code: 'pro_required',
+      character: 'amani'
+    });
+  }
+  user.character = character;
+  store.saveUser(user);
+  res.json({ ok: true, character: resolvedCharacter(user) });
+});
+
 app.post('/api/billing/intent', (req, res) => {
   const user = auth.currentUser(req);
   if (!user) return res.status(401).json({ error: 'Sign in first. I need a person to bill.' });
@@ -359,8 +378,8 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
   if (usage.limit !== null && usage.remaining <= 0) {
     return res.status(402).json({
       error: user
-        ? 'Your free patience ration is empty. Upgrade to keep talking.'
-        : 'Guest quota is done. Sign in to continue, then upgrade if you must.',
+        ? `That is all ${FREE_DAILY} of your free messages for today. Pro removes the limit entirely. Your count resets tomorrow.`
+        : `Guests get ${GUEST_DAILY} messages a day and you have used all ${GUEST_DAILY}. Create a free account for ${FREE_DAILY} a day, or go Pro for unlimited.`,
       code: 'quota',
       usage
     });
