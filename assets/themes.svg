@@ -1,0 +1,31 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="420" rx="28" fill="#09090C"/>
+  <text x="48" y="58" fill="#A4A4B4" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="4">PRO THEMES</text>
+
+  <rect x="48" y="86" width="352" height="286" rx="20" fill="#0B0B0E" stroke="#2D2D36"/>
+  <rect x="72" y="110" width="304" height="88" rx="12" fill="#121217"/>
+  <rect x="72" y="110" width="101" height="88" fill="#0B0B0E"/>
+  <rect x="173" y="110" width="102" height="88" fill="#C9FF3D"/>
+  <rect x="275" y="110" width="101" height="88" fill="#2D2D36"/>
+  <text x="72" y="238" fill="#F7F7F3" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">Acid Noir</text>
+  <text x="72" y="272" fill="#C9FF3D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Black + lime green</text>
+  <text x="72" y="308" fill="#8A8A98" font-family="Arial, Helvetica, sans-serif" font-size="15">The default. Still the brand.</text>
+
+  <rect x="424" y="86" width="352" height="286" rx="20" fill="#0C0808" stroke="#3A2222"/>
+  <rect x="448" y="110" width="304" height="88" rx="12" fill="#160C0C"/>
+  <rect x="448" y="110" width="101" height="88" fill="#0C0808"/>
+  <rect x="549" y="110" width="102" height="88" fill="#FF3B30"/>
+  <rect x="651" y="110" width="101" height="88" fill="#3A2222"/>
+  <text x="448" y="238" fill="#F7F1F1" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">Red Alert</text>
+  <text x="448" y="272" fill="#FF3B30" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Black + red</text>
+  <text x="448" y="308" fill="#B09898" font-family="Arial, Helvetica, sans-serif" font-size="15">Pro only. Less polite.</text>
+
+  <rect x="800" y="86" width="352" height="286" rx="20" fill="#080A10" stroke="#243044"/>
+  <rect x="824" y="110" width="304" height="88" rx="12" fill="#0E1218"/>
+  <rect x="824" y="110" width="101" height="88" fill="#080A10"/>
+  <rect x="925" y="110" width="102" height="88" fill="#3D9EFF"/>
+  <rect x="1027" y="110" width="101" height="88" fill="#243044"/>
+  <text x="824" y="238" fill="#EEF3FB" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800">Midnight Blue</text>
+  <text x="824" y="272" fill="#3D9EFF" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Graphite + electric blue</text>
+  <text x="824" y="308" fill="#8B97AB" font-family="Arial, Helvetica, sans-serif" font-size="15">Pro only. Colder.</text>
+</svg>
