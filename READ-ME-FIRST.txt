@@ -1,0 +1,36 @@
+MR RAGE BAIT — v6  "30-DAY PASS" WORDING FIX
+============================================
+
+TEXT ONLY. Three files. No payment code, no server code,
+no database code, no keys.
+
+  public/index.html     checkout sheet now says 30-day pass,
+                        no stored card, no auto-renewal
+  public/terms.html     section 5 rewritten to match reality
+  public/privacy.html   removed the "cancel your subscription" line
+
+
+WHY
+---
+Your code charges ONCE and gives 30 days. It never charges again.
+But your Terms promised "subscriptions renew each month until you
+cancel". That was not true. Fixed before any real money moves.
+
+
+UPLOAD
+------
+1. Extract, open  upload-to-github
+2. Open the  public  folder
+3. On GitHub go INTO your public folder first:
+       github.com/QJMotsamai/mr-rage-bait  ->  click  public
+4. Add file -> Upload files
+5. Drag the 3 html files in
+6. They will land in public/ automatically because you are
+   already inside that folder
+7. Commit message:  Correct Pro wording to a 30-day pass
+8. Commit changes
+
+
+NOTHING ELSE TO DO. No Render changes. No Paystack changes.
+
+Built for QJ MOTSAMAI.
