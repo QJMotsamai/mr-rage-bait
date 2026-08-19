@@ -41,7 +41,10 @@ const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const FREE_DAILY = Number(process.env.FREE_DAILY_MESSAGES || 12);
 const GUEST_DAILY = Number(process.env.GUEST_DAILY_MESSAGES || 3);
 
-const store = createStore(path.join(DATA_DIR, 'app.json'));
+const store = await createStore({
+  file: path.join(DATA_DIR, 'app.json'),
+  databaseUrl: process.env.DATABASE_URL
+});
 const auth = createAuth({ store, secret: SESSION_SECRET });
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 12 * 1024 * 1024 } });
 const ALLOWED_TYPES = new Set([
@@ -431,7 +434,7 @@ app.post('/api/admin/login', (req, res) => {
 
 app.get('/api/admin/overview', (req, res) => {
   if (!auth.isAdmin(req)) return res.status(401).json({ error: 'Admin sign-in required.' });
-  res.json({ ...store.snapshot(), billing: billingStatus() });
+  res.json({ ...store.snapshot(), billing: billingStatus(), storage: { mode: store.label, durable: store.durable } });
 });
 
 app.get('/api/admin/people', (req, res) => {
@@ -456,9 +459,23 @@ app.get('/terms', (_, res) => res.sendFile(path.join(__dirname, 'public', 'terms
 app.get('/admin', (_, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Mr Rage Bait listening on ${PORT}`);
 });
+
+// Render sends SIGTERM before every redeploy and spin-down.
+// Save anything still in memory before the process disappears.
+let shuttingDown = false;
+for (const signal of ['SIGTERM', 'SIGINT']) {
+  process.on(signal, async () => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    server.close();
+    try { await store.close(); console.log('[store] saved before shutdown'); }
+    catch (error) { console.error('[store] shutdown save failed:', error.message); }
+    process.exit(0);
+  });
+}
 
 function appUrl() {
   return String(process.env.APP_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
