@@ -4,66 +4,180 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Buyers — Mr Rage Bait</title>
+<meta name="color-scheme" content="dark">
 <style>
-:root{--bg:#0b0b0e;--text:#f5f5f1;--muted:#9a9aa8;--acid:#c9ff3d;--line:#2d2d36}
+:root{
+  --bg:#0a0a0c;--surface:#101014;--surface-2:#16161d;--surface-3:#1e1e26;
+  --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.12);
+  --text:#f3f3f1;--muted:#a2a2ae;--faint:#6e6e7c;
+  --accent:#c9ff3d;--accent-ink:#12140b;
+  --accent-soft:rgba(201,255,61,.10);--accent-line:rgba(201,255,61,.32);
+  --danger:#ff6f66;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,sans-serif}
-.wrap{width:min(1100px,calc(100% - 32px));margin:28px auto 80px}
-h1{font-size:34px;letter-spacing:-.05em;margin:18px 0 6px}
-.sub{color:var(--muted);margin:0 0 22px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.1em;font-size:13px;text-decoration:none;color:var(--text)}
-.logo{width:28px;height:28px;display:grid;place-items:center;background:var(--acid);color:#13150d;transform:rotate(-8deg);font-weight:950}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 22px}
-.card{border:1px solid var(--line);background:#14141a;padding:14px;border-radius:10px}
-.card b{display:block;font-size:28px;letter-spacing:-.04em}
-.card span{color:var(--muted);font-size:12px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:#8d8d9a;font-size:11px;letter-spacing:.08em}
-.tag{display:inline-block;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.paying{background:#c9ff3d;color:#12140c}
-.willing{background:#3d3310;color:#f0c84a}
-.interested{background:#24242c;color:#d0d0d8}
-.browsing{background:#1b1b22;color:#8d8d9a}
-.gate{max-width:420px}
-input,button{font:inherit}
-input{width:100%;margin:12px 0;padding:11px 12px;border:1px solid #3a3a44;border-radius:8px;background:#19191f;color:var(--text)}
-button{border:0;border-radius:8px;background:var(--acid);color:#11140c;font-weight:900;min-height:42px;padding:0 16px;cursor:pointer}
-.error{color:#ff8b84;font-size:13px}
-.muted{color:var(--muted);font-size:12px}
-@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}table{display:block;overflow:auto}}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+input,button{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+*{scrollbar-width:thin;scrollbar-color:var(--surface-3) transparent}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:99px;border:3px solid transparent;background-clip:content-box}
+
+.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto;padding:32px 0 96px}
+.brand{
+  display:inline-flex;align-items:center;gap:11px;
+  font-weight:700;letter-spacing:.06em;font-size:13px;
+  text-decoration:none;color:var(--text);
+}
+.logo{
+  width:32px;height:32px;display:grid;place-items:center;
+  background:var(--accent);color:var(--accent-ink);
+  border-radius:10px;transform:rotate(-8deg);font-weight:800;font-size:15px;
+}
+h1{margin:28px 0 10px;font-size:36px;font-weight:650;letter-spacing:-.03em;line-height:1.15}
+.sub{margin:0 0 36px;color:var(--muted);font-size:15px;max-width:70ch;line-height:1.65}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 32px}
+.card{
+  padding:20px;border:1px solid var(--line-2);border-radius:18px;
+  background:var(--surface-2);
+}
+.card b{display:block;font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.card span{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+
+.panel{
+  border:1px solid var(--line-2);border-radius:20px;
+  background:var(--surface);overflow:hidden;margin:0 0 26px;
+}
+.panel-head{
+  padding:18px 22px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+}
+.panel-head h2{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.panel-head p{margin:3px 0 0;font-size:13px;color:var(--faint)}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
+th,td{text-align:left;padding:15px 18px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background .15s ease}
+tbody tr:hover{background:var(--surface-2)}
+th{
+  color:var(--faint);font-size:11px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  background:var(--surface-2);
+}
+td strong{font-weight:600}
+.tag{
+  display:inline-block;padding:5px 11px;border-radius:99px;
+  font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+}
+.paying{background:var(--accent);color:var(--accent-ink)}
+.willing{background:rgba(240,200,74,.16);color:#f0c84a;box-shadow:inset 0 0 0 1px rgba(240,200,74,.3)}
+.interested{background:var(--surface-3);color:var(--text);box-shadow:inset 0 0 0 1px var(--line-2)}
+.browsing{background:var(--surface-2);color:var(--faint);box-shadow:inset 0 0 0 1px var(--line)}
+
+.gate{max-width:440px;margin-top:8px}
+.gate p{color:var(--muted);font-size:14.5px}
+code{
+  background:var(--surface-2);border:1px solid var(--line-2);
+  padding:2px 7px;border-radius:7px;font-size:13px;color:var(--accent);
+}
+input{
+  width:100%;margin:14px 0;padding:14px 16px;
+  border:1px solid var(--line-2);border-radius:14px;
+  background:var(--surface-2);color:var(--text);font-size:15px;
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+input:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 4px var(--accent-soft)}
+.btn{
+  border:0;border-radius:14px;
+  background:var(--accent);color:var(--accent-ink);
+  font-weight:700;font-size:15px;min-height:50px;padding:0 24px;
+  transition:filter .18s ease,transform .18s ease;
+}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:scale(.985)}
+.error{color:var(--danger);font-size:14px;min-height:22px;margin:6px 0 0}
+.muted{color:var(--muted);font-size:13.5px;line-height:1.6}
+.note{margin:0;padding:16px 22px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+
+.grant{padding:22px}
+.grant-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.grant-row input{flex:1;min-width:240px;margin:0}
+.grant .muted{margin:14px 0 0}
+.ok{color:var(--accent);font-size:14px;min-height:22px;margin:6px 0 0}
+
+@media(max-width:900px){
+  .cards{grid-template-columns:1fr 1fr}
+  h1{font-size:29px}
+  .wrap{width:calc(100% - 28px);padding-top:24px}
+}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <main class="wrap">
   <a class="brand" href="/"><span class="logo">R</span>MR RAGE BAIT</a>
   <h1>Who is willing to buy</h1>
-  <p class="sub">Signed-in people, local currency, and how far they got toward paying. This is the finance view inside the product. Stripe and Paystack dashboards show the same buyers after checkout.</p>
+  <p class="sub">Signed-in people, local currency, and how far they got toward paying. This is the finance view inside the product. Paystack shows the same buyers after checkout.</p>
 
   <section id="gate" class="gate">
     <p>Enter the <code>ADMIN_KEY</code> from your server environment.</p>
     <input id="key" type="password" placeholder="Admin key" autocomplete="current-password">
-    <button id="enter" type="button">Open the board</button>
+    <button class="btn" id="enter" type="button">Open the board</button>
     <p class="error" id="error"></p>
   </section>
 
   <section id="board" hidden>
     <div class="cards" id="cards"></div>
-    <table>
-      <thead>
-        <tr>
-          <th>Person</th>
-          <th>Intent</th>
-          <th>Plan</th>
-          <th>Country</th>
-          <th>Charge</th>
-          <th>Messages</th>
-          <th>Last seen</th>
-        </tr>
-      </thead>
-      <tbody id="rows"></tbody>
-    </table>
-    <p class="muted" id="billingNote"></p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>People</h2>
+          <p>Sorted by how close they are to paying you.</p>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Person</th>
+              <th>Intent</th>
+              <th>Plan</th>
+              <th>Country</th>
+              <th>Charge</th>
+              <th>Messages</th>
+              <th>Last seen</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="note" id="billingNote"></p>
+      <p class="note" id="storageNote"></p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Grant Pro</h2>
+          <p>Give an existing account Pro without a payment. For your own testing.</p>
+        </div>
+      </div>
+      <form class="grant" id="grantForm">
+        <div class="grant-row">
+          <input id="grantEmail" type="email" required placeholder="email@example.com" autocomplete="off">
+          <button class="btn" type="submit">Grant Pro</button>
+        </div>
+        <p class="ok" id="grantOk"></p>
+        <p class="muted">The account must already exist — create it on the chat page first. Real customers get Pro automatically after a successful Paystack charge.</p>
+      </form>
+    </div>
   </section>
 </main>
 <script>
@@ -83,24 +197,33 @@ async function load(){
     <div class="card"><b>${overviewData.paying}</b><span>Paying in local currency</span></div>`;
   document.querySelector('#rows').innerHTML=peopleData.people.map(p=>`
     <tr>
-      <td><strong>${escape(p.name||'')}</strong><br><span class="muted">${escape(p.email)}</span></td>
+      <td><strong>${esc(p.name||'')}</strong><br><span class="muted">${esc(p.email)}</span></td>
       <td><span class="tag ${p.intent}">${p.intent}</span></td>
-      <td>${p.plan}</td>
-      <td>${p.country||'—'}</td>
-      <td>${p.currency&&p.amount?format(p.currency,p.amount): (p.currency||'—')}</td>
+      <td>${esc(p.plan)}</td>
+      <td>${esc(p.country||'—')}</td>
+      <td>${p.currency&&p.amount?format(p.currency,p.amount):esc(p.currency||'—')}</td>
       <td>${p.messageCountTotal||0}</td>
       <td>${p.lastSeenAt?new Date(p.lastSeenAt).toLocaleString():'—'}</td>
     </tr>`).join('')||'<tr><td colspan="7">Nobody has signed in yet.</td></tr>';
+  const st=overviewData.storage||{};
+  const badge=document.querySelector('#storageNote');
+  if(st.durable){
+    badge.style.color='var(--accent)';
+    badge.textContent='Storage: Postgres. Accounts and Pro upgrades survive every restart and redeploy.';
+  }else{
+    badge.style.color='#f0c84a';
+    badge.textContent='Storage: temporary file. Everything here is wiped on the next restart — set DATABASE_URL on Render.';
+  }
   const b=overviewData.billing||{};
   document.querySelector('#billingNote').textContent=b.ready
     ? `Payments live via ${b.provider}. Webhooks will mark people as paying after a successful local-currency charge.`
-    : 'Payments are not connected yet. Upgrade clicks still appear here as interested or willing, so you can see demand before you plug in Stripe or Paystack.';
+    : 'Payments are not connected yet. Upgrade clicks still appear here as interested or willing, so you can see demand before you plug in Paystack.';
   return true;
 }
 function format(currency,amount){
   try{return new Intl.NumberFormat('en',{style:'currency',currency}).format(amount/100)}catch{return `${amount} ${currency}`}
 }
-function escape(value){return String(value).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))}
+function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 document.querySelector('#enter').onclick=async()=>{
   error.textContent='';
   const r=await fetch('/api/admin/login',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:document.querySelector('#key').value})});
@@ -108,11 +231,18 @@ document.querySelector('#enter').onclick=async()=>{
   if(!r.ok){error.textContent=data.error||'Could not sign in.';return}
   gate.hidden=true;board.hidden=false;await load();
 };
+document.querySelector('#key').addEventListener('keydown',e=>{if(e.key==='Enter')document.querySelector('#enter').click()});
 document.querySelector('#grantForm').onsubmit=async e=>{
   e.preventDefault();
-  const r=await fetch('/api/admin/grant',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.querySelector('#grantEmail').value,plan:'pro'})});
+  const ok=document.querySelector('#grantOk');
+  ok.textContent='';
+  const email=document.querySelector('#grantEmail').value;
+  const r=await fetch('/api/admin/grant',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,plan:'pro'})});
   const data=await r.json().catch(()=>({}));
-  if(!r.ok){alert(data.error||'Could not grant Pro.');return}
+  if(!r.ok){ok.style.color='var(--danger)';ok.textContent=data.error||'Could not grant Pro.';return}
+  ok.style.color='var(--accent)';
+  ok.textContent=`${data.email} is now ${data.plan.toUpperCase()}. Refresh the chat page to see it.`;
+  document.querySelector('#grantEmail').value='';
   await load();
 };
 load().then(ok=>{if(ok){gate.hidden=true;board.hidden=false}});

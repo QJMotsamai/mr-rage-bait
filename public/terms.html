@@ -4,19 +4,64 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Terms of Use — Mr Rage Bait</title>
+<meta name="color-scheme" content="dark">
 <style>
-:root{--bg:#0b0b0e;--text:#f5f5f1;--muted:#9a9aa8;--acid:#c9ff3d;--line:#2d2d36}
+:root{
+  --bg:#0a0a0c;--surface-2:#16161d;
+  --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.12);
+  --text:#f3f3f1;--muted:#a2a2ae;--faint:#6e6e7c;
+  --accent:#c9ff3d;--accent-ink:#12140b;--accent-line:rgba(201,255,61,.32);
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,sans-serif;line-height:1.65}
-.wrap{width:min(760px,calc(100% - 40px));margin:40px auto 80px}
-a{color:var(--acid)}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.1em;font-size:13px;text-decoration:none;color:var(--text)}
-.logo{width:28px;height:28px;display:grid;place-items:center;background:var(--acid);color:#13150d;transform:rotate(-8deg);font-weight:950}
-h1{font-size:42px;letter-spacing:-.05em;line-height:1.05;margin:28px 0 8px}
-.meta{color:var(--muted);font-size:14px}
-h2{margin-top:34px;font-size:20px}
-p,li{color:#d5d5dc}
-ul{padding-left:20px}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;
+  font-size:17px;line-height:1.75;-webkit-font-smoothing:antialiased;
+}
+.wrap{width:min(720px,calc(100% - 40px));margin:0 auto;padding:36px 0 110px}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-line)}
+a:hover{border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.brand{
+  display:inline-flex;align-items:center;gap:11px;
+  font-weight:700;letter-spacing:.06em;font-size:13px;
+  text-decoration:none;color:var(--text);border:0;
+}
+.logo{
+  width:32px;height:32px;display:grid;place-items:center;
+  background:var(--accent);color:var(--accent-ink);
+  border-radius:10px;transform:rotate(-8deg);font-weight:800;font-size:15px;
+}
+h1{margin:36px 0 10px;font-size:42px;font-weight:650;letter-spacing:-.035em;line-height:1.1}
+.meta{
+  margin:0 0 8px;color:var(--faint);font-size:14px;
+  padding-bottom:32px;border-bottom:1px solid var(--line);
+}
+h2{
+  margin:48px 0 14px;font-size:21px;font-weight:650;
+  letter-spacing:-.015em;line-height:1.35;color:var(--text);
+}
+p,li{color:var(--muted);font-size:16.5px}
+p{margin:0 0 18px}
+ul{padding-left:22px;margin:0 0 18px}
+li{margin:0 0 10px}
+strong{color:var(--text);font-weight:600}
+.back{
+  display:inline-block;margin-top:56px;padding:13px 22px;
+  border:1px solid var(--line-2);border-radius:99px;
+  background:var(--surface-2);color:var(--text);
+  font-size:14px;font-weight:600;
+  transition:border-color .18s ease,background .18s ease;
+}
+.back:hover{border-color:var(--accent-line);background:#1e1e26}
+@media(max-width:640px){
+  body{font-size:16px}
+  .wrap{width:calc(100% - 32px);padding-top:26px}
+  h1{font-size:31px;margin-top:26px}
+  h2{font-size:19px;margin-top:38px}
+  p,li{font-size:15.5px}
+}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -60,6 +105,7 @@ ul{padding-left:20px}
   <p>We may update these terms. The date at the top will change. Continued use after that is acceptance.</p>
 
   <p><a href="/">Back to the chat</a> · <a href="/privacy">Privacy Policy</a></p>
+  <a class="back" href="/">← Back to Mr Rage Bait</a>
 </main>
 </body>
 </html>
