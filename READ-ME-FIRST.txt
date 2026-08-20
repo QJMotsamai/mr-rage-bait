@@ -1,36 +1,40 @@
-MR RAGE BAIT — v6  "30-DAY PASS" WORDING FIX
-============================================
+MR RAGE BAIT — v10   MENU NOW FLOATS OVER THE CHAT
+==================================================
 
-TEXT ONLY. Three files. No payment code, no server code,
-no database code, no keys.
+SAME TWO FILES. Replaces v7, v8 and v9 completely.
+Whatever you have or have not uploaded, just upload this one.
 
-  public/index.html     checkout sheet now says 30-day pass,
-                        no stored card, no auto-renewal
-  public/terms.html     section 5 rewritten to match reality
-  public/privacy.html   removed the "cancel your subscription" line
+  public/index.html   the menu fix, plus everything from v7-v9
+  server.js           tone + games (unchanged since v8)
 
 
-WHY
----
-Your code charges ONCE and gives 30 days. It never charges again.
-But your Terms promised "subscriptions renew each month until you
-cancel". That was not true. Fixed before any real money moves.
+THE FIX
+-------
+Before: opening the menu made the top bar grow taller and pushed
+the chat down. On a shorter phone the bottom of the menu -
+including Privacy and Terms under Sign out - got squeezed out of
+sight, and it did not look like a menu at all.
+
+Now: the menu floats ON TOP of the chat, the chat behind it is
+dimmed, and the menu scrolls on its own if the phone is small.
+Privacy and Terms are always reachable.
+
+Tap the dimmed area, the X, or press Escape to close it.
+
+Tested on a small 360x640 phone: the whole menu fits.
+
+Not touched: Paystack, database, package.json, render.yaml, keys.
+No new environment variables. No new packages.
+The computer layout is unchanged.
 
 
-UPLOAD
-------
-1. Extract, open  upload-to-github
-2. Open the  public  folder
-3. On GitHub go INTO your public folder first:
-       github.com/QJMotsamai/mr-rage-bait  ->  click  public
-4. Add file -> Upload files
-5. Drag the 3 html files in
-6. They will land in public/ automatically because you are
-   already inside that folder
-7. Commit message:  Correct Pro wording to a 30-day pass
-8. Commit changes
+UPLOAD (two small commits)
+--------------------------
+1. github.com/QJMotsamai/mr-rage-bait -> click  public
+   Add file -> Upload files -> drag  index.html  -> Commit
+2. Click the repo name to go back to the root
+   Add file -> Upload files -> drag  server.js  -> Commit
 
-
-NOTHING ELSE TO DO. No Render changes. No Paystack changes.
+Nothing to change on Render or Paystack.
 
 Built for QJ MOTSAMAI.
