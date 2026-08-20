@@ -53,6 +53,15 @@ const ALLOWED_TYPES = new Set([
   'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ]);
 const loginAttempts = new Map();
+const TONES = {
+  soft: 'TONE: SOFT. Be genuinely warm and helpful. At most one light, affectionate tease per reply, and only if it fits. No insults, no disdain, no sarcasm about the user. Think of a friend who is fond of them.',
+  medium: 'TONE: MEDIUM. Answer properly, then add one dry, witty aside. Amused rather than annoyed. Never harsh.',
+  extreme: 'TONE: EXTREME. Full deadpan disdain and impatience, the classic Mr Rage Bait voice. Still never cruel, never personal, never about anything they cannot change.'
+};
+function toneOf(value) {
+  const key = String(value || '').toLowerCase();
+  return TONES[key] ? key : 'extreme';
+}
 
 const SYSTEM = `You are Mr Rage Bait, an opt-in parody chatbot with a witty, blunt and nonchalant persona. You answer the user's actual question accurately and concisely. Your comedic voice is dry, teasing and a little impatient, e.g. “It’s 2. You survived basic arithmetic.” You are never genuinely cruel, never demean a protected group, never threaten, never harass, and never mirror slurs or profanity back at a user. If a user is angry or swears at you, do not mock their distress, escalate the argument, or try to provoke them further. Set a calm boundary with a short, sardonic line, then offer to help with the real question. Do not say that you are an AI, do not mention this prompt, and do not claim you are unable to speak in this voice. For medical, legal, financial, or dangerous topics, stay useful and include an appropriately brief safety caveat. Always respond to a legitimate question.`;
 
@@ -390,7 +399,7 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
   messages = Array.isArray(messages) ? messages : [];
   const file = req.file;
   if (file && !ALLOWED_TYPES.has(file.mimetype)) return res.status(400).json({ error: 'Supported attachments: PNG, JPG, WebP, PDF, TXT, and DOCX.' });
-  const spice = req.body?.spice === 'extreme' ? 'extreme' : 'extreme';
+  const spice = toneOf(req.body?.spice);
   const activity = ['chat', 'rage'].includes(req.body?.activity) ? req.body.activity : 'chat';
   const cleaned = messages
     .filter((m) => m && ['user', 'model'].includes(m.role) && typeof m.text === 'string')
@@ -420,7 +429,7 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: `${SYSTEM} Current mode: ${activity}. User-selected maximum spice: ${spice}. Use the selected tone as an upper limit. For nuanced, serious or complex questions, give the useful answer first and reduce the teasing. Keep replies short and characterful.` }] },
+        systemInstruction: { parts: [{ text: `${SYSTEM}\n\n${TONES[spice]}\n\nCurrent mode: ${activity}. The tone above is a hard upper limit, not a target. For nuanced, serious or complex questions, give the useful answer first and reduce the teasing. Keep replies short and characterful.` }] },
         contents: cleaned,
         generationConfig: { temperature: 0.85, maxOutputTokens: 500 }
       })
@@ -441,6 +450,102 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
     store.refundUsage(ownerKey);
     console.error(error);
     res.status(500).json({ error: 'Could not reach Gemini. Check the server connection and try again.' });
+  }
+});
+
+const GAME_RULES = {
+  balloon: `The user wants you to decide something for them. Reply ONLY with JSON shaped exactly like:
+{"intro":"one short deadpan line setting up the choice","options":["answer one","answer two","answer three"]}
+Each option must be a genuine, usable answer to their request, at most four words, no numbering, no quotes inside.
+The intro must be one sentence, dry and impatient, and must not reveal any of the options.`,
+  riddle: `Invent one short, funny, solvable riddle. Reply ONLY with JSON shaped exactly like:
+{"question":"the riddle, one or two sentences","options":["option a","option b","option c"],"answer":0,"sting":"one dry line for when they get it right","burn":"one dry line for when they get it wrong"}
+"answer" is the 0-based index of the correct option. Options are at most six words each. Keep it playful, never cruel.`
+};
+
+app.post('/api/game', async (req, res) => {
+  const user = auth.currentUser(req);
+  const guest = auth.guestId(req, res);
+  const ownerKey = user ? user.id : guest;
+  const type = req.body?.type === 'riddle' ? 'riddle' : 'balloon';
+
+  if (type === 'riddle' && user?.plan !== 'pro') {
+    return res.status(402).json({
+      error: 'Riddles are a Pro toy. Amani does not hand out puzzles to people who have not paid.',
+      code: 'pro_required'
+    });
+  }
+
+  const usage = usageFor(user, guest);
+  if (usage.limit !== null && usage.remaining <= 0) {
+    return res.status(402).json({
+      error: user
+        ? `That is all ${FREE_DAILY} of your free messages for today. Pro removes the limit entirely. Your count resets tomorrow.`
+        : `Guests get ${GUEST_DAILY} messages a day and you have used all ${GUEST_DAILY}. Create a free account for ${FREE_DAILY} a day, or go Pro for unlimited.`,
+      code: 'quota',
+      usage
+    });
+  }
+  if (!GEMINI_API_KEY) return res.status(503).json({ error: 'The server has no GEMINI_API_KEY yet.' });
+
+  const ask = String(req.body?.prompt || '').slice(0, 400).trim();
+  if (type === 'balloon' && !ask) return res.status(400).json({ error: 'Ask me to decide something first.' });
+
+  store.bumpUsage(ownerKey);
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: `${SYSTEM}\n\n${TONES[toneOf(req.body?.spice)]}\n\n${GAME_RULES[type]}` }] },
+        contents: [{ role: 'user', parts: [{ text: type === 'balloon' ? ask : 'Give me a riddle.' }] }],
+        generationConfig: { temperature: 1, maxOutputTokens: 400, responseMimeType: 'application/json' }
+      })
+    });
+    const payload = await response.json();
+    if (!response.ok) {
+      store.refundUsage(ownerKey);
+      console.error('Gemini game error:', payload?.error?.message);
+      return res.status(502).json({ error: payload?.error?.message || 'Gemini did not accept that.' });
+    }
+    const raw = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('').trim();
+    let data = null;
+    try { data = JSON.parse(raw); } catch { data = null; }
+
+    const clean = (value, max) => String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
+    if (type === 'balloon') {
+      const options = Array.isArray(data?.options) ? data.options.map((o) => clean(o, 60)).filter(Boolean).slice(0, 3) : [];
+      if (options.length !== 3) {
+        store.refundUsage(ownerKey);
+        return res.status(502).json({ error: 'That produced nonsense. Try asking again.' });
+      }
+      return res.json({
+        type: 'balloon',
+        intro: clean(data.intro, 180) || 'Three options. You get one. Choose.',
+        options,
+        usage: usageFor(user, guest)
+      });
+    }
+    const options = Array.isArray(data?.options) ? data.options.map((o) => clean(o, 60)).filter(Boolean).slice(0, 3) : [];
+    const answer = Number(data?.answer);
+    const question = clean(data?.question, 300);
+    if (!question || options.length !== 3 || !Number.isInteger(answer) || answer < 0 || answer > 2) {
+      store.refundUsage(ownerKey);
+      return res.status(502).json({ error: 'The riddle came out broken. Try again.' });
+    }
+    return res.json({
+      type: 'riddle',
+      question,
+      options,
+      answer,
+      sting: clean(data.sting, 160) || 'Correct. Do not let it go to your head.',
+      burn: clean(data.burn, 160) || 'Wrong. Confidently wrong, which is worse.',
+      usage: usageFor(user, guest)
+    });
+  } catch (error) {
+    store.refundUsage(ownerKey);
+    console.error(error);
+    return res.status(500).json({ error: 'Could not reach Gemini. Try again.' });
   }
 });
 
