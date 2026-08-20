@@ -1,40 +1,60 @@
-MR RAGE BAIT — v10   MENU NOW FLOATS OVER THE CHAT
-==================================================
+MR RAGE BAIT — v11   LINK PREVIEWS + APP ICONS
+==============================================
 
-SAME TWO FILES. Replaces v7, v8 and v9 completely.
-Whatever you have or have not uploaded, just upload this one.
+EIGHT FILES, ALL INTO THE SAME  public  FOLDER.
+This is the easiest upload yet - one folder, one commit.
 
-  public/index.html   the menu fix, plus everything from v7-v9
-  server.js           tone + games (unchanged since v8)
-
-
-THE FIX
--------
-Before: opening the menu made the top bar grow taller and pushed
-the chat down. On a shorter phone the bottom of the menu -
-including Privacy and Terms under Sign out - got squeezed out of
-sight, and it did not look like a menu at all.
-
-Now: the menu floats ON TOP of the chat, the chat behind it is
-dimmed, and the menu scrolls on its own if the phone is small.
-Privacy and Terms are always reachable.
-
-Tap the dimmed area, the X, or press Escape to close it.
-
-Tested on a small 360x640 phone: the whole menu fits.
-
-Not touched: Paystack, database, package.json, render.yaml, keys.
-No new environment variables. No new packages.
-The computer layout is unchanged.
+  index.html          link preview tags + icon links added
+                      (built on top of what is already live -
+                       nothing you uploaded before is undone)
+  admin.html          hidden from Google search
+  og-image.png        NEW - the picture people will see
+  icon-512.png        NEW
+  icon-192.png        NEW
+  apple-touch-icon.png NEW - iPhone home screen
+  favicon-32.png      NEW - the little tab icon
+  site.webmanifest    NEW - lets Android install it as an app
 
 
-UPLOAD (two small commits)
---------------------------
-1. github.com/QJMotsamai/mr-rage-bait -> click  public
-   Add file -> Upload files -> drag  index.html  -> Commit
-2. Click the repo name to go back to the root
-   Add file -> Upload files -> drag  server.js  -> Commit
+WHAT THIS DOES
+--------------
+Right now, pasting your link into WhatsApp shows a grey box with
+no picture. After this it shows your artwork, your headline and
+your description - which is the difference between people
+clicking and people scrolling past.
+
+Works on WhatsApp, X, LinkedIn, Facebook, Telegram and iMessage.
+
+It also gives you a proper icon in the browser tab, and a real
+icon if someone adds the site to their phone's home screen.
+
+And your /admin page is now marked "do not index", so it will
+not turn up in Google results.
+
+
+UPLOAD (one commit)
+-------------------
+1. github.com/QJMotsamai/mr-rage-bait  ->  click  public
+2. Add file -> Upload files
+3. Drag ALL EIGHT files in
+4. Commit message:  Add link preview image and app icons
+5. Commit changes
+
+Because you go into the public folder first, everything lands in
+the right place automatically.
 
 Nothing to change on Render or Paystack.
+No new environment variables. No new packages.
+
+
+AFTER IT IS LIVE
+----------------
+Paste your link into a WhatsApp chat with yourself.
+You should see the picture.
+
+If it still shows the old grey box, the platform cached it.
+For X, use  cards-dev.twitter.com/validator
+For Facebook/WhatsApp, use  developers.facebook.com/tools/debug
+and press "Scrape Again".
 
 Built for QJ MOTSAMAI.
