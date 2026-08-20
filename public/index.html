@@ -246,6 +246,22 @@ button{cursor:pointer}
 @media(max-width:1440px){.head-copy p{display:none}}
 .account-bar{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .head-panel{display:flex;align-items:center}
+.segmented{
+  display:inline-flex;align-items:center;gap:2px;
+  padding:3px;border:1px solid var(--line-2);border-radius:99px;
+  background:var(--surface-2);
+}
+.segmented button{
+  border:0;background:transparent;color:var(--muted);
+  border-radius:99px;min-height:30px;padding:0 13px;
+  font-size:12px;font-weight:600;
+  transition:background .18s ease,color .18s ease;
+}
+.segmented button:hover{color:var(--text)}
+.segmented button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.seg-label{display:none}
+.playrow{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ghost.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)}
 .panel-legal{display:none}
 
 /* pills in the header */
@@ -325,27 +341,6 @@ button{cursor:pointer}
 .type i:nth-child(2){animation-delay:.16s}
 .type i:nth-child(3){animation-delay:.32s}
 
-/* conversation starters */
-.starters{
-  display:flex;flex-wrap:wrap;gap:10px;
-  padding-left:48px;
-  animation:enter .5s cubic-bezier(.2,.7,.3,1) both;
-  animation-delay:.1s;
-}
-.starters.hide{display:none}
-.starter{
-  padding:11px 16px;
-  border-radius:99px;
-  border:1px solid var(--line-2);
-  background:var(--surface-2);
-  color:var(--muted);
-  font-size:13.5px;
-  text-align:left;
-  transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease;
-}
-.starter:hover{background:var(--surface-3);color:var(--text);border-color:var(--accent-line)}
-.starter:active{transform:scale(.97)}
-
 /* ---------- composer ---------- */
 .composer{
   padding:8px max(20px,calc((100% - 800px) / 2)) max(16px,env(safe-area-inset-bottom));
@@ -365,16 +360,6 @@ button{cursor:pointer}
 .tool:hover{background:var(--surface-3);color:var(--text);border-color:var(--accent-line)}
 .tool:active{transform:scale(.97)}
 .refund{margin-left:0}
-.extreme{
-  margin-left:auto;
-  display:inline-flex;align-items:center;
-  min-height:36px;padding:0 14px;
-  border-radius:99px;
-  border:1px solid var(--accent-line);
-  background:var(--accent-soft);
-  color:var(--accent);
-  font-size:11px;font-weight:700;letter-spacing:.1em;
-}
 
 .attachment{
   display:none;align-items:center;gap:10px;
@@ -446,6 +431,57 @@ button{cursor:pointer}
 }
 .hint a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent}
 .hint a:hover{color:var(--accent);border-bottom-color:var(--accent-line)}
+
+/* ---------- games ---------- */
+.tool.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)}
+.game{display:block}
+.game-intro{margin:0 0 18px;color:var(--text)}
+.balloon-row{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;min-height:118px}
+.balloon{
+  border:0;background:transparent;padding:0;
+  display:grid;justify-items:center;
+  transition:transform .25s cubic-bezier(.2,.7,.3,1),opacity .25s ease;
+  animation:float 3.4s ease-in-out infinite;
+}
+.balloon:nth-child(2){animation-delay:.5s}
+.balloon:nth-child(3){animation-delay:1s}
+.balloon:hover{transform:translateY(-6px)}
+.balloon-body{
+  width:64px;height:78px;color:var(--b);
+  border-radius:50% 50% 46% 46%;
+  background:radial-gradient(circle at 34% 28%,#ffffff66 0,#ffffff10 26%,transparent 52%),var(--b);
+  position:relative;
+  box-shadow:inset -9px -12px 20px rgba(0,0,0,.3);
+}
+.balloon-body::after{
+  content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);
+  border-left:6px solid transparent;border-right:6px solid transparent;
+  border-top:10px solid var(--b);
+}
+.balloon-string{width:1px;height:30px;margin-top:7px;background:linear-gradient(var(--line-2),transparent)}
+.balloon.gone{opacity:0;transform:translateY(14px) scale(.5);pointer-events:none}
+.balloon.pop{animation:pop .3s ease forwards}
+.balloon-answer{
+  display:inline-block;padding:15px 24px;
+  border:1px solid var(--accent-line);border-radius:18px;
+  background:var(--accent-soft);color:var(--accent);
+  font-size:19px;font-weight:700;letter-spacing:-.01em;
+  animation:enter .3s cubic-bezier(.2,.7,.3,1) both;
+}
+.riddle-opts{display:grid;gap:10px}
+.riddle-opt{
+  width:100%;text-align:left;
+  padding:14px 18px;border-radius:14px;
+  border:1px solid var(--line-2);background:var(--surface-2);color:var(--text);
+  font-size:14.5px;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease;
+}
+.riddle-opt:hover:not(:disabled){background:var(--surface-3);border-color:var(--accent-line)}
+.riddle-opt:disabled{cursor:default;opacity:.55}
+.riddle-opt.right{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);opacity:1;font-weight:650}
+.riddle-opt.wrong{border-color:var(--danger);color:var(--danger);opacity:1}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes pop{40%{transform:scale(1.28)}100%{transform:scale(.2);opacity:0}}
 
 /* ---------- overlays ---------- */
 .overlay{
@@ -689,6 +725,21 @@ button{cursor:pointer}
     color:var(--faint);font-size:12.5px;min-height:26px;padding:0 4px;
   }
   .account-bar .pro-pill{justify-content:center;font-size:12px}
+  .seg-label{
+    display:block;margin:4px 2px -2px;
+    font-size:11px;font-weight:700;letter-spacing:.09em;
+    color:var(--faint);text-transform:uppercase;
+  }
+  .account-bar .segmented{
+    width:100%;display:grid;grid-template-columns:repeat(3,1fr);
+    padding:4px;border-radius:14px;
+  }
+  .account-bar .segmented button{min-height:40px;border-radius:11px;font-size:13.5px}
+  .account-bar .playrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+  .account-bar .playrow .ghost{
+    width:100%;min-height:46px;padding:0 6px;
+    font-size:12.5px;justify-content:center;text-align:center;
+  }
   .account-bar .pay{justify-content:center;font-weight:700}
 
   .messages{padding:22px 16px 12px;gap:22px}
@@ -696,13 +747,10 @@ button{cursor:pointer}
   .msg.bot{grid-template-columns:28px minmax(0,1fr);gap:12px}
   .msg.bot::before{width:28px;height:28px;font-size:13px;border-radius:9px}
   .msg.user{max-width:86%;padding:12px 16px;border-radius:20px 20px 6px 20px}
-  .starters{padding-left:0}
-  .starter{font-size:13px;padding:10px 14px}
 
   .composer{padding:6px 16px max(18px,env(safe-area-inset-bottom))}
   .tools{gap:7px;margin-bottom:10px}
   .tool{min-height:34px;padding:0 12px;font-size:11.5px}
-  .extreme{font-size:10px;padding:0 11px;min-height:34px}
   .hint{font-size:11px;margin-top:10px;justify-content:center}
   .hint span:first-child{display:none}
 
@@ -767,19 +815,11 @@ button{cursor:pointer}
 
     <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Conversation">
       <div class="msg bot">I’m Mr Rage Bait. Ask your question. Make it worth the processing power.</div>
-      <div class="starters" id="starters">
-        <button type="button" class="starter" data-starter="Explain quantum entanglement like I'm in a hurry.">Explain something fast</button>
-        <button type="button" class="starter" data-starter="Give me an honest review of my business idea: a subscription app for socks.">Judge my idea</button>
-        <button type="button" class="starter" data-starter="Write a short, polite email declining a meeting I do not want to attend.">Write an email</button>
-        <button type="button" class="starter" data-starter="Settle this once and for all: is a hotdog a sandwich?">Settle an argument</button>
-      </div>
     </div>
 
     <form class="composer" id="form">
       <div class="tools">
-        <button type="button" class="tool" id="rageMe">⚡ Rage me</button>
-        <button type="button" class="tool refund" id="refund">↺ Rage refund</button>
-        <span class="extreme">EXTREME MODE</span>
+        <button type="button" class="tool refund" id="refund">↺ Reset</button>
       </div>
       <input id="fileInput" type="file" hidden accept=".png,.jpg,.jpeg,.webp,.pdf,.txt,.docx">
       <div class="attachment" id="attachment">
@@ -787,7 +827,7 @@ button{cursor:pointer}
         <button type="button" id="clearFile" aria-label="Remove file">×</button>
       </div>
       <div class="input-row">
-        <button class="attach" type="button" id="attach" aria-label="Attach image or document" title="Attach PNG, JPG, WebP, PDF, TXT or DOCX — max 12 MB"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a5.5 5.5 0 0 1-7.78-7.78l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.19a1.5 1.5 0 0 1-2.12-2.12l8.49-8.49"/></svg></button>
+        <button class="attach" type="button" id="attach" aria-label="Attach image or document" title="Attach PNG, JPG, WebP, PDF, TXT or DOCX — max 12 MB"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13"/></svg></button>
         <textarea id="input" rows="1" autocomplete="off" maxlength="500" placeholder="Message Mr Rage Bait…"></textarea>
         <button class="send" aria-label="Send message">↑</button>
       </div>
@@ -865,11 +905,14 @@ const fileInput=document.querySelector('#fileInput');
 const attachment=document.querySelector('#attachment');
 const fileName=document.querySelector('#fileName');
 const accountBar=document.querySelector('#accountBar');
-const starters=document.querySelector('#starters');
 const miniFace=document.querySelector('#miniFace');
 const chatHead=document.querySelector('#chatHead');
 const barMenu=document.querySelector('#barMenu');
-let chatLog=[],busy=false,spice='extreme',activity='chat',selectedFile=null,me=null,googleOn=false,authMode='login';
+const TONE_LIST=[['soft','Soft'],['medium','Medium'],['extreme','Extreme']];
+function readTone(){try{const v=localStorage.getItem('mrb_tone');return TONE_LIST.some(t=>t[0]===v)?v:'extreme'}catch{return 'extreme'}}
+function saveTone(v){try{localStorage.setItem('mrb_tone',v)}catch{}}
+let gameMode=null;
+let chatLog=[],busy=false,spice=readTone(),activity='chat',selectedFile=null,me=null,googleOn=false,authMode='login';
 const locale=navigator.language||'en';
 const timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
 const hint=()=>({locale,timezone});
@@ -888,6 +931,81 @@ const castMeta=[
 const rageQs=['Pineapple on pizza: culinary crime or proof you enjoy chaos?','Are voice notes communication, or an audio hostage situation?','Is cereal soup? Pick a side and accept the consequences.','Do you return the shopping trolley, or leave it to develop a personality?','Is a hotdog a sandwich? The wrong answer will be noted.'];
 
 function add(text,who){const e=document.createElement('div');e.className='msg '+who;e.textContent=text;messages.append(e);scrollDown();return e}
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+const BALLOON_COLOURS=['var(--accent)','#7c8cff','#ff9f45'];
+function setGameMode(mode){
+  gameMode=mode;
+  const btn=document.querySelector('#balloonBtn');
+  if(btn) btn.classList.toggle('on',mode==='balloon');
+  input.placeholder=mode==='balloon'?'What should I decide for you?':'Message Mr Rage Bait…';
+}
+function renderBalloons(data){
+  const wrap=document.createElement('div');
+  wrap.className='msg bot';
+  wrap.innerHTML='<div class="game"><p class="game-intro">'+esc(data.intro)+'</p><div class="balloon-row">'+
+    data.options.map((o,i)=>'<button type="button" class="balloon" data-i="'+i+'" style="--b:'+BALLOON_COLOURS[i]+'" aria-label="Pop balloon '+(i+1)+'"><span class="balloon-body"></span><span class="balloon-string"></span></button>').join('')+
+    '</div></div>';
+  messages.append(wrap);scrollDown();
+  wrap.querySelectorAll('.balloon').forEach(btn=>{
+    btn.onclick=()=>{
+      if(wrap.dataset.done)return;
+      wrap.dataset.done='1';
+      const i=Number(btn.dataset.i);
+      wrap.querySelectorAll('.balloon').forEach(other=>{if(other!==btn)other.classList.add('gone')});
+      btn.classList.add('pop');
+      react('amused');
+      setTimeout(()=>{
+        wrap.querySelector('.balloon-row').innerHTML='<div class="balloon-answer">'+esc(data.options[i])+'</div>';
+        scrollDown();
+      },300);
+    };
+  });
+}
+function renderRiddle(data){
+  const wrap=document.createElement('div');
+  wrap.className='msg bot';
+  wrap.innerHTML='<div class="game"><p class="game-intro">'+esc(data.question)+'</p><div class="riddle-opts">'+
+    data.options.map((o,i)=>'<button type="button" class="riddle-opt" data-i="'+i+'">'+esc(o)+'</button>').join('')+
+    '</div></div>';
+  messages.append(wrap);scrollDown();
+  wrap.querySelectorAll('.riddle-opt').forEach(btn=>{
+    btn.onclick=()=>{
+      if(wrap.dataset.done)return;
+      wrap.dataset.done='1';
+      const picked=Number(btn.dataset.i);
+      wrap.querySelectorAll('.riddle-opt').forEach((other,i)=>{
+        other.disabled=true;
+        if(i===data.answer)other.classList.add('right');
+        else if(i===picked)other.classList.add('wrong');
+      });
+      const win=picked===data.answer;
+      add(win?data.sting:data.burn,'bot');
+      react(win?'impressed':'annoyed');
+    };
+  });
+}
+async function sendGame(type,q){
+  if(busy)return;
+  busy=true;input.disabled=true;
+  if(q){add(q,'user');input.value='';input.style.height='auto'}
+  setGameMode(null);
+  const loading=wait();react('thinking');
+  try{
+    const d=await api('/api/game',{method:'POST',body:JSON.stringify({type,prompt:q||'',...hint()})});
+    loading.remove();
+    if(d.type==='balloon')renderBalloons(d);else renderRiddle(d);
+    if(d.usage&&me){me.usage=d.usage;renderAccount()}
+  }catch(err){
+    loading.remove();
+    add(err.message||'That did not work.','bot');
+    const code=err.data&&err.data.code;
+    if(code==='quota'&&me&&err.data.usage){me.usage=err.data.usage;renderAccount()}
+    if(code==='pro_required'||code==='quota'){
+      if(me&&me.signedIn)openUpgrade();else show('authOverlay',true);
+    }
+    react('annoyed');
+  }finally{busy=false;input.disabled=false;input.focus()}
+}
 function scrollDown(){requestAnimationFrame(()=>{messages.scrollTop=messages.scrollHeight})}
 function react(x='thinking'){
   portrait.className='portrait react-'+x;
@@ -896,7 +1014,6 @@ function react(x='thinking'){
 }
 function wait(){const e=document.createElement('div');e.className='msg bot type';e.innerHTML='<i></i><i></i><i></i>';messages.append(e);scrollDown();return e}
 function show(id,on){document.getElementById(id).classList.toggle('show',on)}
-function hideStarters(){if(starters)starters.classList.add('hide')}
 function autoGrow(){input.style.height='auto';input.style.height=Math.min(input.scrollHeight,184)+'px'}
 function applyCharacter(id){
   const cast=castMeta.find(c=>c.id===id)||castMeta[0];
@@ -918,9 +1035,52 @@ async function api(url,opt={}){
   if(!r.ok) throw Object.assign(new Error(data.error||'The server had a problem.'),{status:r.status,data});
   return data;
 }
+function toneMarkup(){
+  return '<span class="seg-label">Tone</span><div class="segmented" role="group" aria-label="Reply tone">'+
+    TONE_LIST.map(([id,label])=>'<button type="button" data-tone="'+id+'"'+(spice===id?' class="on"':'')+'>'+label+'</button>').join('')+
+    '</div>';
+}
+function playMarkup(){
+  return '<span class="seg-label">Play</span><div class="playrow">'+
+    '<button type="button" class="ghost" id="rageMe">⚡ Rage me</button>'+
+    '<button type="button" class="ghost'+(gameMode==='balloon'?' on':'')+'" id="balloonBtn">◍ Pop it</button>'+
+    '<button type="button" class="ghost" id="riddleBtn">? Riddle</button>'+
+  '</div>';
+}
+function bindPlay(){
+  const rage=accountBar.querySelector('#rageMe');
+  const balloon=accountBar.querySelector('#balloonBtn');
+  const riddle=accountBar.querySelector('#riddleBtn');
+  if(rage) rage.onclick=()=>{
+    if(busy)return;
+    activity='rage';
+    add('⚡ RAGE ME: '+rageQs[Math.floor(Math.random()*rageQs.length)],'bot');
+    add('Answer it. I’m listening against my better judgment.','bot');
+    react('annoyed');
+  };
+  if(balloon) balloon.onclick=()=>{
+    if(busy)return;
+    if(gameMode==='balloon'){setGameMode(null);return}
+    setGameMode('balloon');
+    add('Fine. Tell me what to decide — a dog name, what to eat, which one to text back. Three balloons, one answer, no take-backs.','bot');
+    input.focus();
+  };
+  if(riddle) riddle.onclick=()=>{if(!busy)sendGame('riddle')};
+}
+function bindTone(){
+  accountBar.querySelectorAll('[data-tone]').forEach(btn=>{
+    btn.onclick=e=>{
+      e.stopPropagation();
+      spice=btn.dataset.tone;saveTone(spice);
+      accountBar.querySelectorAll('[data-tone]').forEach(o=>o.classList.toggle('on',o.dataset.tone===spice));
+      const said={soft:'Soft mode. I will be nice. Briefly.',medium:'Medium. Helpful, with commentary.',extreme:'Extreme. You asked for this.'};
+      add(said[spice],'bot');
+    };
+  });
+}
 function renderAccount(){
-  if(!me){accountBar.innerHTML='<button class="ghost" id="openAuth">Sign in</button>';bindAccount();return}
-  const bits=[];
+  if(!me){accountBar.innerHTML=toneMarkup()+playMarkup()+'<button class="ghost" id="openAuth">Sign in</button>';bindAccount();bindTone();bindPlay();return}
+  const bits=[toneMarkup(),playMarkup()];
   if(me.signedIn){
     bits.push(`<span class="chip" title="${me.email}">${me.email}</span>`);
     if(me.plan==='pro'){
@@ -941,6 +1101,8 @@ function renderAccount(){
   }
   accountBar.innerHTML=bits.join('');
   bindAccount();
+  bindTone();
+  bindPlay();
 }
 function bindAccount(){
   const openAuth=document.querySelector('#openAuth');
@@ -1058,7 +1220,6 @@ async function check(){
 }
 async function send(q){
   if(!q||busy)return;
-  hideStarters();
   busy=true;input.disabled=true;
   add(q,'user');chatLog.push({role:'user',text:q});
   input.value='';input.style.height='auto';
@@ -1097,19 +1258,19 @@ async function send(q){
 document.querySelector('#attach').onclick=()=>fileInput.click();
 fileInput.onchange=()=>{selectedFile=fileInput.files[0]||null;if(selectedFile){fileName.textContent=selectedFile.name;attachment.classList.add('show')}};
 document.querySelector('#clearFile').onclick=()=>{selectedFile=null;fileInput.value='';attachment.classList.remove('show')};
-form.addEventListener('submit',e=>{e.preventDefault();let q=input.value.trim();if(selectedFile&&!q)q='Read this attachment and respond in the selected tone.';send(q)});
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  let q=input.value.trim();
+  if(gameMode==='balloon'){if(q)sendGame('balloon',q);return}
+  if(selectedFile&&!q)q='Read this attachment and respond in the selected tone.';
+  send(q);
+});
 input.addEventListener('input',autoGrow);
 input.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();form.requestSubmit()}
 });
-if(starters){
-  starters.querySelectorAll('[data-starter]').forEach(btn=>{
-    btn.onclick=()=>{hideStarters();send(btn.dataset.starter)};
-  });
-}
-document.querySelector('#rageMe').onclick=()=>{hideStarters();activity='rage';add('⚡ RAGE ME: '+rageQs[Math.floor(Math.random()*rageQs.length)],'bot');add('Answer it. I’m listening against my better judgment.','bot');react('annoyed')};
 document.querySelector('#refund').onclick=()=>{
-  chatLog=[];activity='chat';
+  chatLog=[];activity='chat';setGameMode(null);
   messages.innerHTML='<div class="msg bot">Rage refunded. Your complaint has been ignored with great professionalism. Fresh start.</div>';
   react('amused');
 };
@@ -1119,7 +1280,10 @@ if(barMenu){
     const open=chatHead.classList.toggle('open');
     barMenu.setAttribute('aria-expanded',open?'true':'false');
   };
-  accountBar.addEventListener('click',e=>{if(e.target.closest('button')) closeMenu()});
+  accountBar.addEventListener('click',e=>{
+    const btn=e.target.closest('button');
+    if(btn&&!btn.dataset.tone) closeMenu();
+  });
   document.addEventListener('click',e=>{
     if(chatHead.classList.contains('open')&&!chatHead.contains(e.target)) closeMenu();
   });
