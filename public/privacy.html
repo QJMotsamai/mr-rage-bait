@@ -91,7 +91,7 @@ strong{color:var(--text);font-weight:600}
   <p><strong>Usage data.</strong> How many messages you sent today, total messages, and billing events such as “opened upgrade”, “started checkout”, “paid”, or “cancelled”.</p>
   <p><strong>Theme preference.</strong> If you are on Pro, we store which visual theme you chose (Acid Noir, Red Alert, or Midnight Blue). Free accounts always use Acid Noir.</p>
   <p><strong>Chat content.</strong> Your latest messages are sent to our server only long enough to call Google Gemini and return a reply. We do not store the conversation in our user database. A short live history stays in your browser until you refresh or hit Rage Refund.</p>
-  <p><strong>Attachments.</strong> Files you attach are read in memory to send to Gemini and are not written to disk by this app.</p>
+  <p><strong>Attachments.</strong> Files you attach are read in memory to send to Gemini and are not written to disk by this app. We accept images, plain text and Word documents. We do not accept PDFs.</p>
   <p><strong>Technical data.</strong> IP address (used by the host and payment provider), browser type, and essential cookies.</p>
   <p><strong>Payment data.</strong> Handled by Stripe and/or Paystack. They receive your email, country, the amount, and the currency. They may collect billing name, card or EFT details, and fraud signals. We store only their transaction or customer reference, the currency charged, whether you are Pro, and the date your 30-day pass ends. We never see or store your card number.</p>
 
@@ -109,7 +109,7 @@ strong{color:var(--text);font-weight:600}
 
   <h2>5. Who else sees it</h2>
   <ul>
-    <li><strong>Google Gemini / Google LLC</strong> — processes chat text and attachments to generate replies. If you use Google sign-in, Google also authenticates you.</li>
+    <li><strong>Google Gemini / Google LLC</strong> — processes chat text and attachments to generate replies. If you use Google sign-in, Google also authenticates you. This service currently runs on Google’s free API tier, and Google may use content sent through it to improve their models. Please do not type anything confidential into a joke chatbot.</li>
     <li><strong>Render</strong> or any host we deploy on — stores the running app and the account database.</li>
     <li><strong>Stripe</strong> and/or <strong>Paystack</strong> — process payments, detect fraud, and settle funds. They are responsible for card data.</li>
     <li><strong>You, the account holder</strong> — can see your own email and plan in the app.</li>
