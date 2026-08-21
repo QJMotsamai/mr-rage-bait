@@ -372,7 +372,8 @@ app.get('/api/billing/paystack/callback', async (req, res) => {
       country: data.currency === 'ZAR' ? 'ZA' : null,
       currency: data.currency,
       amount: data.amount,
-      expiresAt: new Date(Date.now() + 31 * 86400000).toISOString()
+      extendDays: 31,
+      reference: data.reference || reference
     });
     res.redirect('/?upgraded=1');
   } catch (error) {
@@ -648,7 +649,8 @@ async function handlePaystackEvent(event) {
       customerId: data.customer?.customer_code,
       currency: data.currency,
       amount: data.amount,
-      expiresAt: new Date(Date.now() + 31 * 86400000).toISOString()
+      extendDays: 31,
+      reference: data.reference
     });
   }
 }
