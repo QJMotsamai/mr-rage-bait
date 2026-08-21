@@ -24,6 +24,7 @@ import { createStore } from './lib/store.js';
 import { countryFromRequest, quoteFor, publicQuote } from './lib/geo.js';
 import { normalizeTheme, resolvedTheme } from './lib/themes.js';
 import { normalizeCharacter, resolvedCharacter } from './lib/characters.js';
+import { generate, aiReady, aiModel, aiProvider } from './lib/ai.js';
 import {
   createAuth, publicUser, normalizeEmail, validEmail,
   hashPassword, verifyPassword, parseCookies, randomToken, appendCookie
@@ -36,7 +37,7 @@ import {
 const app = express();
 const PORT = process.env.PORT || 3000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-only-change-me';
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const FREE_DAILY = Number(process.env.FREE_DAILY_MESSAGES || 12);
@@ -49,7 +50,7 @@ const store = await createStore({
 const auth = createAuth({ store, secret: SESSION_SECRET });
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 12 * 1024 * 1024 } });
 const ALLOWED_TYPES = new Set([
-  'image/png', 'image/jpeg', 'image/webp', 'application/pdf',
+  'image/png', 'image/jpeg', 'image/webp',
   'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ]);
 const loginAttempts = new Map();
@@ -69,8 +70,9 @@ app.set('trust proxy', 1);
 app.get('/api/status', (req, res) => {
   const billing = billingStatus();
   res.json({
-    ready: Boolean(GEMINI_API_KEY),
-    model: GEMINI_MODEL,
+    ready: aiReady(),
+    model: aiModel(),
+    provider: aiProvider(),
     google: Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET),
     billing
   });
@@ -398,7 +400,7 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
   if (typeof messages === 'string') { try { messages = JSON.parse(messages); } catch { messages = []; } }
   messages = Array.isArray(messages) ? messages : [];
   const file = req.file;
-  if (file && !ALLOWED_TYPES.has(file.mimetype)) return res.status(400).json({ error: 'Supported attachments: PNG, JPG, WebP, PDF, TXT, and DOCX.' });
+  if (file && !ALLOWED_TYPES.has(file.mimetype)) return res.status(400).json({ error: 'Supported attachments: PNG, JPG, WebP, TXT, and DOCX.' });
   const spice = toneOf(req.body?.spice);
   const activity = ['chat', 'rage'].includes(req.body?.activity) ? req.body.activity : 'chat';
   const cleaned = messages
@@ -415,7 +417,7 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
     } else latestUser.parts.push({ inlineData: { mimeType: file.mimetype, data: file.buffer.toString('base64') } });
   }
   if (!cleaned.length) return res.status(400).json({ error: 'Send a message first.' });
-  if (!GEMINI_API_KEY) return res.status(503).json({ error: 'The server has no GEMINI_API_KEY yet. Add it in Render’s Environment settings, then redeploy.' });
+  if (!aiReady()) return res.status(503).json({ error: 'The server has no AI key yet. Add it in Render’s Environment settings, then redeploy.' });
 
   store.bumpUsage(ownerKey);
   if (user) {
@@ -425,31 +427,22 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
   }
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: `${SYSTEM}\n\n${TONES[spice]}\n\nCurrent mode: ${activity}. The tone above is a hard upper limit, not a target. For nuanced, serious or complex questions, give the useful answer first and reduce the teasing. Keep replies short and characterful.` }] },
-        contents: cleaned,
-        generationConfig: { temperature: 0.85, maxOutputTokens: 500 }
-      })
+    const result = await generate({
+      system: `${SYSTEM}\n\n${TONES[spice]}\n\nCurrent mode: ${activity}. The tone above is a hard upper limit, not a target. For nuanced, serious or complex questions, give the useful answer first and reduce the teasing. Keep replies short and characterful.`,
+      contents: cleaned,
+      temperature: 0.85,
+      maxTokens: 500
     });
-    const payload = await response.json();
-    if (!response.ok) {
+    if (!result.ok) {
       store.refundUsage(ownerKey);
-      console.error('Gemini error:', payload);
-      return res.status(502).json({ error: payload?.error?.message || 'Gemini did not accept that request.' });
+      console.error('AI error:', result.error);
+      return res.status(result.status || 502).json({ error: result.error });
     }
-    const text = payload?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('').trim();
-    if (!text) {
-      store.refundUsage(ownerKey);
-      return res.status(502).json({ error: 'Gemini returned no text. Try again.' });
-    }
-    res.json({ text, usage: usageFor(user, guest) });
+    res.json({ text: result.text, usage: usageFor(user, guest) });
   } catch (error) {
     store.refundUsage(ownerKey);
     console.error(error);
-    res.status(500).json({ error: 'Could not reach Gemini. Check the server connection and try again.' });
+    res.status(500).json({ error: 'Could not reach the model. Check the server connection and try again.' });
   }
 });
 
@@ -486,29 +479,26 @@ app.post('/api/game', async (req, res) => {
       usage
     });
   }
-  if (!GEMINI_API_KEY) return res.status(503).json({ error: 'The server has no GEMINI_API_KEY yet.' });
+  if (!aiReady()) return res.status(503).json({ error: 'The server has no AI key yet.' });
 
   const ask = String(req.body?.prompt || '').slice(0, 400).trim();
   if (type === 'balloon' && !ask) return res.status(400).json({ error: 'Ask me to decide something first.' });
 
   store.bumpUsage(ownerKey);
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: `${SYSTEM}\n\n${TONES[toneOf(req.body?.spice)]}\n\n${GAME_RULES[type]}` }] },
-        contents: [{ role: 'user', parts: [{ text: type === 'balloon' ? ask : 'Give me a riddle.' }] }],
-        generationConfig: { temperature: 1, maxOutputTokens: 400, responseMimeType: 'application/json' }
-      })
+    const result = await generate({
+      system: `${SYSTEM}\n\n${TONES[toneOf(req.body?.spice)]}\n\n${GAME_RULES[type]}`,
+      contents: [{ role: 'user', parts: [{ text: type === 'balloon' ? ask : 'Give me a riddle.' }] }],
+      json: true,
+      temperature: 1,
+      maxTokens: 400
     });
-    const payload = await response.json();
-    if (!response.ok) {
+    if (!result.ok) {
       store.refundUsage(ownerKey);
-      console.error('Gemini game error:', payload?.error?.message);
-      return res.status(502).json({ error: payload?.error?.message || 'Gemini did not accept that.' });
+      console.error('AI game error:', result.error);
+      return res.status(result.status || 502).json({ error: result.error });
     }
-    const raw = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('').trim();
+    const raw = result.text;
     let data = null;
     try { data = JSON.parse(raw); } catch { data = null; }
 
@@ -545,7 +535,7 @@ app.post('/api/game', async (req, res) => {
   } catch (error) {
     store.refundUsage(ownerKey);
     console.error(error);
-    return res.status(500).json({ error: 'Could not reach Gemini. Try again.' });
+    return res.status(500).json({ error: 'Could not reach the model. Try again.' });
   }
 });
 

@@ -41,7 +41,7 @@ Built by **QJ MOTSAMAI**.
 | --- | --- |
 | The full Amani chat | Unlimited messages |
 | Rage Me / Rage Refund | All three themes |
-| Attachments — image, PDF, TXT, DOCX | Billed in your own currency |
+| Attachments — image, TXT, DOCX | Billed in your own currency |
 | Acid Noir theme | |
 
 <img src="assets/themes.svg" alt="Acid Noir, Red Alert, and Midnight Blue theme previews" />
