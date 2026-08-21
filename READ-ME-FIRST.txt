@@ -1,60 +1,21 @@
-MR RAGE BAIT — v11   LINK PREVIEWS + APP ICONS
-==============================================
+MR RAGE BAIT — v15   MODEL DEFAULT 2.5 -> 3.5 FLASH-LITE
 
-EIGHT FILES, ALL INTO THE SAME  public  FOLDER.
-This is the easiest upload yet - one folder, one commit.
+TWO FILES.  server.js  and  lib/ai.js
 
-  index.html          link preview tags + icon links added
-                      (built on top of what is already live -
-                       nothing you uploaded before is undone)
-  admin.html          hidden from Google search
-  og-image.png        NEW - the picture people will see
-  icon-512.png        NEW
-  icon-192.png        NEW
-  apple-touch-icon.png NEW - iPhone home screen
-  favicon-32.png      NEW - the little tab icon
-  site.webmanifest    NEW - lets Android install it as an app
+DO THIS SECOND. The urgent fix is the Render variable:
 
+    GEMINI_MODEL = gemini-3.5-flash-lite
 
-WHAT THIS DOES
---------------
-Right now, pasting your link into WhatsApp shows a grey box with
-no picture. After this it shows your artwork, your headline and
-your description - which is the difference between people
-clicking and people scrolling past.
+That alone unbreaks your chat in about 3 minutes, no upload.
 
-Works on WhatsApp, X, LinkedIn, Facebook, Telegram and iMessage.
+This zip only changes the built-in DEFAULT from the retired
+2.5-flash-lite to 3.5-flash-lite, so that if the env var is ever
+deleted the app still works instead of breaking.
 
-It also gives you a proper icon in the browser tab, and a real
-icon if someone adds the site to their phone's home screen.
+It also makes a retired model fail with a plain sentence:
+"The owner is pointing me at a model that no longer exists."
+instead of a raw Google error.
 
-And your /admin page is now marked "do not index", so it will
-not turn up in Google results.
-
-
-UPLOAD (one commit)
--------------------
-1. github.com/QJMotsamai/mr-rage-bait  ->  click  public
-2. Add file -> Upload files
-3. Drag ALL EIGHT files in
-4. Commit message:  Add link preview image and app icons
-5. Commit changes
-
-Because you go into the public folder first, everything lands in
-the right place automatically.
-
-Nothing to change on Render or Paystack.
-No new environment variables. No new packages.
-
-
-AFTER IT IS LIVE
-----------------
-Paste your link into a WhatsApp chat with yourself.
-You should see the picture.
-
-If it still shows the old grey box, the platform cached it.
-For X, use  cards-dev.twitter.com/validator
-For Facebook/WhatsApp, use  developers.facebook.com/tools/debug
-and press "Scrape Again".
-
-Built for QJ MOTSAMAI.
+UPLOAD
+  1. Repo home -> Add file -> Upload files -> server.js -> Commit
+  2. Click lib -> Add file -> Upload files -> ai.js    -> Commit
