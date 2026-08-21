@@ -37,7 +37,7 @@ import {
 const app = express();
 const PORT = process.env.PORT || 3000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-only-change-me';
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const FREE_DAILY = Number(process.env.FREE_DAILY_MESSAGES || 12);
