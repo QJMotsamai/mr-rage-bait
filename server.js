@@ -24,14 +24,14 @@ import { createStore } from './lib/store.js';
 import { countryFromRequest, quoteFor, publicQuote } from './lib/geo.js';
 import { normalizeTheme, resolvedTheme } from './lib/themes.js';
 import { normalizeCharacter, resolvedCharacter } from './lib/characters.js';
-import { generate, aiReady, aiModel, aiProvider } from './lib/ai.js';
+import { generate, aiReady, aiModel, aiProvider, aiChain } from './lib/ai.js';
 import {
   createAuth, publicUser, normalizeEmail, validEmail,
   hashPassword, verifyPassword, parseCookies, randomToken, appendCookie
 } from './lib/auth.js';
 import {
-  billingStatus, startCheckout, stripePortal, verifyStripeSignature,
-  verifyPaystackSignature, verifyPaystackReference, applyCheckout, cancelPlan
+  billingStatus, startCheckout, verifyYocoSignature, userForYocoPayment,
+  applyCheckout, PASS_DAYS
 } from './lib/billing.js';
 
 const app = express();
@@ -73,30 +73,21 @@ app.get('/api/status', (req, res) => {
     ready: aiReady(),
     model: aiModel(),
     provider: aiProvider(),
+    chain: aiChain(),
     google: Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET),
     billing
   });
 });
 
-app.post('/api/billing/webhook/stripe', express.raw({ type: 'application/json' }), (req, res) => {
+app.post('/api/billing/webhook/yoco', express.raw({ type: 'application/json' }), (req, res) => {
   const raw = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : String(req.body || '');
-  const event = verifyStripeSignature(raw, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
-  if (!event) return res.status(400).json({ error: 'Invalid Stripe signature.' });
-  handleStripeEvent(event).catch((error) => console.error('Stripe webhook', error));
-  res.json({ received: true });
-});
-
-app.post('/api/billing/webhook/paystack', express.raw({ type: 'application/json' }), (req, res) => {
-  const raw = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : String(req.body || '');
-  if (!verifyPaystackSignature(raw, req.headers['x-paystack-signature'])) {
-    return res.status(400).json({ error: 'Invalid Paystack signature.' });
-  }
-  try {
-    const event = JSON.parse(raw);
-    handlePaystackEvent(event).catch((error) => console.error('Paystack webhook', error));
-  } catch {
-    return res.status(400).json({ error: 'Invalid payload.' });
-  }
+  const event = verifyYocoSignature(raw, {
+    'webhook-id': req.headers['webhook-id'],
+    'webhook-timestamp': req.headers['webhook-timestamp'],
+    'webhook-signature': req.headers['webhook-signature']
+  });
+  if (!event) return res.status(400).json({ error: 'Invalid Yoco signature.' });
+  handleYocoEvent(event).catch((error) => console.error('Yoco webhook', error));
   res.json({ received: true });
 });
 
@@ -345,43 +336,6 @@ app.post('/api/billing/checkout', async (req, res) => {
   }
 });
 
-app.post('/api/billing/portal', async (req, res) => {
-  const user = auth.currentUser(req);
-  if (!user) return res.status(401).json({ error: 'Sign in first.' });
-  try {
-    const url = await stripePortal(user);
-    res.json({ url });
-  } catch (error) {
-    res.status(400).json({ error: error.message || 'Billing portal is unavailable.' });
-  }
-});
-
-app.get('/api/billing/paystack/callback', async (req, res) => {
-  try {
-    const reference = String(req.query.reference || '');
-    if (!reference) return res.redirect('/?checkout=cancel');
-    const verified = await verifyPaystackReference(reference);
-    const data = verified.data;
-    if (data.status !== 'success') return res.redirect('/?checkout=cancel');
-    const userId = data.metadata?.userId;
-    applyCheckout({
-      store,
-      userId,
-      provider: 'paystack',
-      customerId: data.customer?.customer_code,
-      country: data.currency === 'ZAR' ? 'ZA' : null,
-      currency: data.currency,
-      amount: data.amount,
-      extendDays: 31,
-      reference: data.reference || reference
-    });
-    res.redirect('/?upgraded=1');
-  } catch (error) {
-    console.error(error);
-    res.redirect('/?checkout=cancel');
-  }
-});
-
 app.post('/api/chat', upload.single('file'), async (req, res) => {
   const user = auth.currentUser(req);
   const guest = auth.guestId(req, res);
@@ -615,42 +569,34 @@ function tooManyLogins(req) {
   return row.count > 20;
 }
 
-async function handleStripeEvent(event) {
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const userId = session.client_reference_id || session.metadata?.userId;
-    const presentment = session.presentment_details || {};
+async function handleYocoEvent(event) {
+  if (event.type === 'payment.succeeded') {
+    const payment = event.payload || {};
+    const user = userForYocoPayment(store, payment);
+    if (!user) {
+      console.warn('[yoco] payment.succeeded with no matching user:', payment.id || event.id);
+      store.addEvent({ userId: null, type: 'orphan_payment', provider: 'yoco', amount: payment.amount || null, meta: { paymentId: payment.id || null, eventId: event.id || null } });
+      return;
+    }
     applyCheckout({
       store,
-      userId,
-      provider: 'stripe',
-      customerId: session.customer,
-      subscriptionId: session.subscription,
-      currency: (presentment.presentment_currency || session.currency || '').toUpperCase(),
-      amount: presentment.presentment_amount || session.amount_total,
-      expiresAt: null
+      userId: user.id,
+      provider: 'yoco',
+      country: payment.currency === 'ZAR' ? (user.country || 'ZA') : user.country,
+      currency: payment.currency || 'ZAR',
+      amount: payment.amount,
+      extendDays: PASS_DAYS,
+      reference: payment.id || event.id
     });
   }
-  if (event.type === 'customer.subscription.deleted') {
-    const sub = event.data.object;
-    const userId = sub.metadata?.userId || store.findUser((user) => user.stripeSubscriptionId === sub.id)?.id;
-    if (userId) cancelPlan(store, userId, 'stripe');
-  }
-}
-
-async function handlePaystackEvent(event) {
-  if (event.event === 'charge.success') {
-    const data = event.data;
-    const userId = data.metadata?.userId;
-    applyCheckout({
-      store,
-      userId,
-      provider: 'paystack',
-      customerId: data.customer?.customer_code,
-      currency: data.currency,
-      amount: data.amount,
-      extendDays: 31,
-      reference: data.reference
+  if (event.type === 'refund.succeeded' || event.type === 'refund.failed') {
+    const payment = event.payload || {};
+    const user = userForYocoPayment(store, payment);
+    store.addEvent({
+      userId: user?.id || null,
+      type: event.type === 'refund.succeeded' ? 'refund_received' : 'refund_failed',
+      provider: 'yoco',
+      amount: payment.amount || null
     });
   }
 }

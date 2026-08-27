@@ -11,7 +11,7 @@
 :root{
   --bg:#0a0a0c;--surface:#101014;--surface-2:#16161d;--surface-3:#1e1e26;
   --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.12);
-  --text:#f3f3f1;--muted:#a2a2ae;--faint:#6e6e7c;
+  --text:#f3f3f1;--muted:#a2a2ae;--faint:#878792;
   --accent:#c9ff3d;--accent-ink:#12140b;
   --accent-soft:rgba(201,255,61,.10);--accent-line:rgba(201,255,61,.32);
   --danger:#ff6f66;
@@ -125,7 +125,7 @@ input:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 4px va
 <main class="wrap">
   <a class="brand" href="/"><span class="logo">R</span>MR RAGE BAIT</a>
   <h1>Who is willing to buy</h1>
-  <p class="sub">Signed-in people, local currency, and how far they got toward paying. This is the finance view inside the product. Paystack shows the same buyers after checkout.</p>
+  <p class="sub">Signed-in people, rand pricing, and how far they got toward paying. This is the finance view inside the product. Yoco shows the same buyers after checkout.</p>
 
   <section id="gate" class="gate">
     <p>Enter the <code>ADMIN_KEY</code> from your server environment.</p>
@@ -177,7 +177,7 @@ input:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 4px va
           <button class="btn" type="submit">Grant Pro</button>
         </div>
         <p class="ok" id="grantOk"></p>
-        <p class="muted">The account must already exist — create it on the chat page first. Real customers get Pro automatically after a successful Paystack charge.</p>
+        <p class="muted">The account must already exist — create it on the chat page first. Real customers get Pro automatically after a successful Yoco charge.</p>
       </form>
     </div>
   </section>
@@ -196,7 +196,7 @@ async function load(){
     <div class="card"><b>${overviewData.users}</b><span>Signed-in people</span></div>
     <div class="card"><b>${overviewData.interested}</b><span>Opened upgrade</span></div>
     <div class="card"><b>${overviewData.willing}</b><span>Started checkout</span></div>
-    <div class="card"><b>${overviewData.paying}</b><span>Paying in local currency</span></div>`;
+    <div class="card"><b>${overviewData.paying}</b><span>Holding a 30-day pass</span></div>`;
   document.querySelector('#rows').innerHTML=peopleData.people.map(p=>`
     <tr>
       <td><strong>${esc(p.name||'')}</strong><br><span class="muted">${esc(p.email)}</span></td>
@@ -218,8 +218,8 @@ async function load(){
   }
   const b=overviewData.billing||{};
   document.querySelector('#billingNote').textContent=b.ready
-    ? `Payments live via ${b.provider}. Webhooks will mark people as paying after a successful local-currency charge.`
-    : 'Payments are not connected yet. Upgrade clicks still appear here as interested or willing, so you can see demand before you plug in Paystack.';
+    ? 'Payments live via Yoco. A verified payment.succeeded webhook marks the buyer as holding a 30-day pass.'
+    : 'Payments are not connected yet. Upgrade clicks still appear here as interested or willing, so you can see demand before you plug in Yoco.';
   return true;
 }
 function format(currency,amount){

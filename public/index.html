@@ -46,7 +46,7 @@ html[data-theme="acid"]{
   --line-2:rgba(255,255,255,.12);
   --text:#f3f3f1;
   --muted:#a2a2ae;
-  --faint:#6e6e7c;
+  --faint:#878792;
   --accent:#c9ff3d;
   --accent-ink:#12140b;
   --accent-soft:rgba(201,255,61,.10);
@@ -65,7 +65,7 @@ html[data-theme="alert"]{
   --line-2:rgba(255,255,255,.12);
   --text:#f7f0f0;
   --muted:#b39d9d;
-  --faint:#7d6666;
+  --faint:#938080;
   --accent:#ff4d43;
   --accent-ink:#1a0505;
   --accent-soft:rgba(255,77,67,.12);
@@ -84,7 +84,7 @@ html[data-theme="midnight"]{
   --line-2:rgba(255,255,255,.13);
   --text:#eef2f9;
   --muted:#94a1b6;
-  --faint:#647289;
+  --faint:#7e8a9d;
   --accent:#4aa3ff;
   --accent-ink:#05121f;
   --accent-soft:rgba(74,163,255,.12);
@@ -104,7 +104,7 @@ html[data-theme="rose"]{
   --line-2:rgba(255,255,255,.13);
   --text:#fbf0f5;
   --muted:#b898a8;
-  --faint:#7d6270;
+  --faint:#947e8a;
   --accent:#ff4d9d;
   --accent-ink:#1a0510;
   --accent-soft:rgba(255,77,157,.12);
@@ -123,7 +123,7 @@ html[data-theme="volt"]{
   --line-2:rgba(255,255,255,.13);
   --text:#faf6e8;
   --muted:#b3aa8c;
-  --faint:#7c745c;
+  --faint:#908974;
   --accent:#ffd426;
   --accent-ink:#191400;
   --accent-soft:rgba(255,212,38,.12);
@@ -625,7 +625,7 @@ button{cursor:pointer}
 .theme-card strong{display:block;font-size:15px;font-weight:650}
 .theme-card span{display:block;margin-top:4px;font-size:13px;color:var(--muted)}
 .lock{
-  font-size:10.5px;font-weight:700;letter-spacing:.09em;
+  font-size:11px;font-weight:700;letter-spacing:.09em;
   color:var(--muted);
   padding:6px 11px;border-radius:99px;
   background:var(--surface-3);border:1px solid var(--line);
@@ -694,7 +694,7 @@ button{cursor:pointer}
   }
   .status{
     padding:0;background:none;border:0;
-    font-size:10px;letter-spacing:.05em;gap:5px;
+    font-size:11px;letter-spacing:.05em;gap:5px;
   }
   .dot{width:6px;height:6px;box-shadow:none}
 
@@ -907,17 +907,17 @@ button{cursor:pointer}
     <button class="close" type="button" data-close="payOverlay" aria-label="Close">×</button>
     <div class="eyebrow">Pro</div>
     <h2 id="payTitle">Unlimited access to my limited patience.</h2>
-    <div class="price" id="payPrice">R89 <span>/ 30 days</span></div>
+    <div class="price" id="payPrice">R35 <span>/ 30 days</span></div>
     <ul class="perks">
       <li>Unlimited messages for 30 days</li>
       <li>All five themes, including Rose Riot and High Voltage</li>
       <li>The full cast: Amani, Zola and Neo</li>
       <li>One payment. No card stored, no auto-renewal.</li>
     </ul>
-    <p id="payCopy">One payment in your local currency. Pro lasts 30 days, then your account goes back to free on its own.</p>
+    <p id="payCopy">One payment of R35 in rand. Pro lasts 30 days, then your account goes back to free on its own.</p>
     <div class="error" id="payError"></div>
     <button class="primary" id="payStart" type="button">Continue to checkout</button>
-    <p class="fine">Nothing to cancel — the pass simply ends after 30 days. Paystack processes the payment; your card details never touch this server and nothing is saved for future charges. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
+    <p class="fine">Nothing to cancel — the pass simply ends after 30 days, and you can buy another whenever you like. Yoco processes the payment; your card details never touch this server and nothing is saved for future charges. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
   </div>
 </div>
 
@@ -1132,9 +1132,12 @@ function renderAccount(){
   if(me.signedIn){
     bits.push(`<span class="chip" title="${me.email}">${me.email}</span>`);
     if(me.plan==='pro'){
-      bits.push('<span class="pro-pill">PRO</span>');
+      const days=me.proUntil?Math.max(0,Math.ceil((new Date(me.proUntil)-Date.now())/86400000)):null;
+      const until=me.proUntil?new Date(me.proUntil).toLocaleDateString():'';
+      bits.push(`<span class="pro-pill" title="Pass ends ${until} — buy another any time, days stack">PRO${days!==null?' · '+days+'d':''}</span>`);
       bits.push('<button class="ghost" id="openCast">Cast</button>');
       bits.push('<button class="ghost" id="openThemes">Themes</button>');
+      bits.push('<button class="pay" id="openPay">Renew</button>');
     } else {
       bits.push(`<span class="chip">${me.usage.remaining} left</span>`);
       bits.push('<button class="ghost" id="openCast">Cast</button>');
@@ -1169,8 +1172,8 @@ function paintPrice(){
   if(!quote) return;
   document.querySelector('#payPrice').innerHTML=`${quote.label} <span>/ 30 days</span>`;
   document.querySelector('#payCopy').textContent=quote.ready
-    ? `One payment of ${quote.label} in ${quote.currency} through Paystack. Pro lasts 30 days, then your account returns to free on its own. Your card is not stored and you will not be charged again.`
-    : `This will be ${quote.label} in ${quote.currency} for a 30-day pass. Add a free Paystack key to take the money. Your interest is still logged.`;
+    ? `One payment of ${quote.label} in rand through Yoco. Pro lasts 30 days, then your account returns to free on its own. Your card is not stored and you will not be charged again.`
+    : `This will be ${quote.label} for a 30-day pass. Add a free Yoco key to take the money. Your interest is still logged.`;
 }
 function paintThemes(){
   const current=me?.theme||'acid';
@@ -1262,7 +1265,7 @@ async function check(){
     const d=await api('/api/status');
     googleOn=Boolean(d.google);
     document.querySelector('#googleBtn').hidden=!googleOn;
-    statusEl.innerHTML=d.ready?'<span class="dot"></span>Online':'<span class="dot" style="background:var(--danger);box-shadow:none"></span>Add Gemini key';
+    statusEl.innerHTML=d.ready?'<span class="dot"></span>Online':'<span class="dot" style="background:var(--danger);box-shadow:none"></span>Add an AI key';
   }catch{statusEl.innerHTML='<span class="dot" style="background:var(--danger);box-shadow:none"></span>Offline'}
   try{await refresh()}catch{renderAccount()}
 }
@@ -1374,16 +1377,34 @@ document.querySelector('#payStart').onclick=async()=>{
     const result=await api('/api/billing/checkout',{method:'POST',body:JSON.stringify(hint())});
     if(result.url){location.href=result.url;return}
     box.textContent=result.message||'Interest logged. Payments are not live yet.';
-    add('I wrote your name down as someone willing to pay. Plug in Paystack when you want the money.','bot');
+    add('I wrote your name down as someone willing to pay. Plug in Yoco when you want the money.','bot');
   }catch(err){box.textContent=err.message}
 };
 
 const params=new URLSearchParams(location.search);
 if(params.get('upgraded')==='1') add('Pro unlocked. Themes are in the top right. Try not to pick red just because you are angry.','bot');
+if(params.get('upgraded')==='pending') waitForPass();
 if(params.get('checkout')==='cancel') add('Checkout cancelled. The willingness was noted anyway.','bot');
+if(params.get('checkout')==='failed') add('That payment did not go through. The card said no. Try again when you are ready.','bot');
 if(params.get('signedin')==='1') add('Google let you in. I still have standards.','bot');
 if(params.get('auth')==='google_failed') add('Google sign-in failed. Use email, like a person from 2009.','bot');
 if([...params.keys()].length) window.history.replaceState({},'',location.pathname);
+
+async function waitForPass(){
+  const startedAt=me?.proUntil||'';
+  add('Payment done. Giving the server a second to unlock your pass…','bot');
+  for(let i=0;i<8;i++){
+    await new Promise(r=>setTimeout(r,2500));
+    try{
+      me=await refresh();
+      if(me?.plan==='pro'&&(me.proUntil||'')!==startedAt){
+        add('Pro unlocked for 30 days. Themes and the cast are in the top right. When the pass ends, you just buy another — nothing renews on its own.','bot');
+        return;
+      }
+    }catch{}
+  }
+  add('Still processing. If you paid, the pass appears on its own within a minute — refresh to check. Nothing to chase.','bot');
+}
 
 check();
 </script>

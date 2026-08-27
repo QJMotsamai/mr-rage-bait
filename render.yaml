@@ -7,10 +7,16 @@ services:
     startCommand: npm start
     healthCheckPath: /
     envVars:
+      - key: AI_PROVIDER
+        value: auto
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
-        value: gemini-3.1-flash-lite
+        value: gemini-3.5-flash-lite
       - key: SESSION_SECRET
         generateValue: true
       - key: APP_URL
@@ -23,9 +29,7 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
-      - key: STRIPE_SECRET_KEY
+      - key: YOCO_SECRET_KEY
         sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-      - key: PAYSTACK_SECRET_KEY
+      - key: YOCO_WEBHOOK_SECRET
         sync: false

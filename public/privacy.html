@@ -9,7 +9,7 @@
 :root{
   --bg:#0a0a0c;--surface-2:#16161d;
   --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.12);
-  --text:#f3f3f1;--muted:#a2a2ae;--faint:#6e6e7c;
+  --text:#f3f3f1;--muted:#a2a2ae;--faint:#878792;
   --accent:#c9ff3d;--accent-ink:#12140b;--accent-line:rgba(201,255,61,.32);
 }
 *{box-sizing:border-box}
@@ -80,27 +80,27 @@ strong{color:var(--text);font-weight:600}
     <li>You can try the chat as a guest. We then only store a random cookie and a daily message count.</li>
     <li>If you sign in, we store your email, password hash or Google id, country guess, and plan.</li>
     <li>We do <strong>not</strong> keep a permanent archive of your chat transcripts.</li>
-    <li>Messages you send are processed by Google Gemini so the character can reply, then discarded from our database.</li>
-    <li>If you pay, Stripe or Paystack see your identity and charge you in your local currency. We never receive your full card number.</li>
+    <li>Messages you send are processed by our AI providers (Groq, and Google Gemini for images and long documents) so the character can reply, then discarded from our database.</li>
+    <li>If you pay, Yoco sees your identity and charges you in South African rand. We never receive your full card number.</li>
     <li>The owner dashboard shows who signed in, who opened checkout, and who paid. That is how we tell a willing buyer from a tourist.</li>
   </ul>
 
   <h2>3. Information we collect</h2>
   <p><strong>Account data.</strong> Email address, display name, hashed password, Google account id if you use Google sign-in, plan (free or pro), and timestamps for signup and last visit.</p>
-  <p><strong>Approximate location.</strong> Country, timezone, and browser language so we can show and charge the right local currency. We do not collect GPS.</p>
+  <p><strong>Approximate location.</strong> Country, timezone, and browser language, so we have a rough sense of where interest comes from. We do not collect GPS.</p>
   <p><strong>Usage data.</strong> How many messages you sent today, total messages, and billing events such as “opened upgrade”, “started checkout”, “paid”, or “cancelled”.</p>
   <p><strong>Theme preference.</strong> If you are on Pro, we store which visual theme you chose (Acid Noir, Red Alert, or Midnight Blue). Free accounts always use Acid Noir.</p>
   <p><strong>Chat content.</strong> Your latest messages are sent to our server only long enough to call Google Gemini and return a reply. We do not store the conversation in our user database. A short live history stays in your browser until you refresh or hit Rage Refund.</p>
   <p><strong>Attachments.</strong> Files you attach are read in memory to send to Gemini and are not written to disk by this app. We accept images, plain text and Word documents. We do not accept PDFs.</p>
   <p><strong>Technical data.</strong> IP address (used by the host and payment provider), browser type, and essential cookies.</p>
-  <p><strong>Payment data.</strong> Handled by Stripe and/or Paystack. They receive your email, country, the amount, and the currency. They may collect billing name, card or EFT details, and fraud signals. We store only their transaction or customer reference, the currency charged, whether you are Pro, and the date your 30-day pass ends. We never see or store your card number.</p>
+  <p><strong>Payment data.</strong> Handled by Yoco. They receive your email, country, the amount, and the currency (South African rand). They may collect billing name, card details, and fraud signals. We store only their transaction reference, whether you are Pro, and the date your 30-day pass ends. We never see or store your card number.</p>
 
   <h2>4. Why we use it</h2>
   <ul>
     <li>To run the chatbot you asked for.</li>
     <li>To create and secure your account.</li>
     <li>To enforce free daily limits and unlock Pro.</li>
-    <li>To identify the person who is willing to buy and charge them in their local currency.</li>
+    <li>To identify the person who is willing to buy a 30-day pass.</li>
     <li>To prevent abuse, spam, and fraud.</li>
     <li>To meet tax, accounting, and legal duties.</li>
     <li>To answer support and privacy requests.</li>
@@ -109,11 +109,12 @@ strong{color:var(--text);font-weight:600}
 
   <h2>5. Who else sees it</h2>
   <ul>
-    <li><strong>Google Gemini / Google LLC</strong> — processes chat text and attachments to generate replies. If you use Google sign-in, Google also authenticates you. This service currently runs on Google’s free API tier, and Google may use content sent through it to improve their models. Please do not type anything confidential into a joke chatbot.</li>
-    <li><strong>Render</strong> or any host we deploy on — stores the running app and the account database.</li>
-    <li><strong>Stripe</strong> and/or <strong>Paystack</strong> — process payments, detect fraud, and settle funds. They are responsible for card data.</li>
+    <li><strong>Groq</strong> — processes chat text on their free API tier to generate replies.</li>
+    <li><strong>Google Gemini / Google LLC</strong> — processes images, long documents, and overflow when Groq is unavailable. If you use Google sign-in, Google also authenticates you. Both AI services currently run on free API tiers, and free tiers may use content sent through them to improve their models. Please do not type anything confidential into a joke chatbot.</li>
+    <li><strong>Render</strong> or any host we deploy on — stores the running app, and <strong>Neon</strong> stores the account database.</li>
+    <li><strong>Yoco</strong> — processes payments, detects fraud, and settles funds. They are responsible for card data.</li>
     <li><strong>You, the account holder</strong> — can see your own email and plan in the app.</li>
-    <li><strong>QJ Motsamai</strong> — can see account and billing events in the private admin board, and in the Stripe or Paystack dashboard.</li>
+    <li><strong>QJ Motsamai</strong> — can see account and billing events in the private admin board, and in the Yoco dashboard.</li>
   </ul>
   <p>We do not sell your personal information. We do not use your chats to train a public advertising profile. We do not run third-party advertising cookies.</p>
 
@@ -146,7 +147,7 @@ strong{color:var(--text);font-weight:600}
   <p>Passwords are stored as salted hashes, not as plain text. Session tokens are stored hashed. Gemini API keys stay on the server. Payment cards never touch our server. No method of transmission is perfect; do not send secrets you cannot afford to type into a joke chatbot.</p>
 
   <h2>11. International transfers</h2>
-  <p>Your information may be processed in South Africa and in other countries where Google, Stripe, Paystack, or our host operate, including the United States and the European Union. We only use established providers and only for the purposes above.</p>
+  <p>Your information may be processed in South Africa and in other countries where Groq, Google, Yoco, Neon, or our host operate, including the United States and the European Union. We only use established providers and only for the purposes above.</p>
 
   <h2>12. Changes</h2>
   <p>If this policy changes in a material way, we will update the date at the top of this page. Continued use after that date means you accept the updated policy.</p>
