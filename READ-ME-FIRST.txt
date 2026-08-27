@@ -1,21 +1,25 @@
-MR RAGE BAIT — v15   MODEL DEFAULT 2.5 -> 3.5 FLASH-LITE
+MR RAGE BAIT — current setup
 
-TWO FILES.  server.js  and  lib/ai.js
+AI (no upload needed, just env vars on Render):
+  Main    = Groq, llama-3.1-8b-instant   -> GROQ_API_KEY  (console.groq.com/keys, free)
+  Fallback= Gemini 3.5 Flash-Lite        -> GEMINI_API_KEY (aistudio.google.com, free)
+  Images and very long documents skip Groq and go straight to Gemini.
+  If Groq fails or hits a rate limit, the same message is retried on
+  Gemini automatically. No code change is ever needed to switch.
 
-DO THIS SECOND. The urgent fix is the Render variable:
+Payments:
+  Yoco only. R35 once-off for a 30-day Pro pass. Passes stack —
+  buying again adds 30 days to whatever time is left.
+  Env vars: YOCO_SECRET_KEY (sk_live_...) and YOCO_WEBHOOK_SECRET
+  (whsec_..., shown when you create the webhook in the Yoco portal).
+  Webhook URL to register in Yoco:
+    https://YOUR-APP.onrender.com/api/billing/webhook/yoco
+  Events: payment.succeeded (credit the pass), refund.succeeded,
+  refund.failed (logged for the owner).
 
-    GEMINI_MODEL = gemini-3.5-flash-lite
+Database:
+  Neon Postgres. Use the POOLED connection string (host contains
+  "-pooler") as DATABASE_URL on Render.
 
-That alone unbreaks your chat in about 3 minutes, no upload.
-
-This zip only changes the built-in DEFAULT from the retired
-2.5-flash-lite to 3.5-flash-lite, so that if the env var is ever
-deleted the app still works instead of breaking.
-
-It also makes a retired model fail with a plain sentence:
-"The owner is pointing me at a model that no longer exists."
-instead of a raw Google error.
-
-UPLOAD
-  1. Repo home -> Add file -> Upload files -> server.js -> Commit
-  2. Click lib -> Add file -> Upload files -> ai.js    -> Commit
+The urgent fix from the old v15 note (GEMINI_MODEL=gemini-3.5-flash-lite)
+is now the built-in default; nothing to change by hand.
