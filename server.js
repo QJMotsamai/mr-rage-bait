@@ -31,7 +31,8 @@ import {
 } from './lib/auth.js';
 import {
   billingStatus, startCheckout, verifyYocoSignature, userForYocoPayment,
-  applyCheckout, PASS_DAYS
+  applyCheckout, registerYocoWebhook, yocoWebhookStatus, resolveYocoWebhookSecret,
+  PASS_DAYS
 } from './lib/billing.js';
 
 const app = express();
@@ -85,7 +86,7 @@ app.post('/api/billing/webhook/yoco', express.raw({ type: 'application/json' }),
     'webhook-id': req.headers['webhook-id'],
     'webhook-timestamp': req.headers['webhook-timestamp'],
     'webhook-signature': req.headers['webhook-signature']
-  });
+  }, resolveYocoWebhookSecret(store));
   if (!event) return res.status(400).json({ error: 'Invalid Yoco signature.' });
   handleYocoEvent(event).catch((error) => console.error('Yoco webhook', error));
   res.json({ received: true });
@@ -521,6 +522,32 @@ app.post('/api/admin/grant', (req, res) => {
   if (user.plan === 'pro') user.planExpiresAt = null;
   store.saveUser(user);
   res.json({ ok: true, email: user.email, plan: user.plan });
+});
+
+function yocoWebhookUrl() {
+  return `${appUrl()}/api/billing/webhook/yoco`;
+}
+
+app.get('/api/admin/webhook/yoco', (req, res) => {
+  if (!auth.isAdmin(req)) return res.status(401).json({ error: 'Admin sign-in required.' });
+  res.json(yocoWebhookStatus({ store, url: yocoWebhookUrl() }));
+});
+
+app.post('/api/admin/webhook/yoco', async (req, res) => {
+  if (!auth.isAdmin(req)) return res.status(401).json({ error: 'Admin sign-in required.' });
+  try {
+    const result = await registerYocoWebhook({ store, url: yocoWebhookUrl() });
+    store.addEvent({
+      userId: null,
+      type: 'webhook_registered',
+      provider: 'yoco',
+      meta: { url: result.url, mode: result.mode, replaced: result.replaced }
+    });
+    res.json({ ...result, status: yocoWebhookStatus({ store, url: yocoWebhookUrl() }) });
+  } catch (error) {
+    console.error('Yoco webhook registrar', error);
+    res.status(502).json({ error: error.message || 'Could not register the webhook with Yoco.' });
+  }
 });
 
 app.get('/privacy', (_, res) => res.sendFile(path.join(__dirname, 'public', 'privacy.html')));

@@ -167,6 +167,17 @@ input:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 4px va
     <div class="panel">
       <div class="panel-head">
         <div>
+          <h2>Yoco webhook</h2>
+          <p>One tap tells Yoco to send <code>payment.succeeded</code> to this server and stores the signing secret.</p>
+        </div>
+        <button class="btn" id="webhookBtn" type="button">Register webhook</button>
+      </div>
+      <p class="note" id="webhookStatus">Checking…</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
           <h2>Grant Pro</h2>
           <p>Give an existing account Pro without a payment. For your own testing.</p>
         </div>
@@ -220,8 +231,55 @@ async function load(){
   document.querySelector('#billingNote').textContent=b.ready
     ? 'Payments live via Yoco. A verified payment.succeeded webhook marks the buyer as holding a 30-day pass.'
     : 'Payments are not connected yet. Upgrade clicks still appear here as interested or willing, so you can see demand before you plug in Yoco.';
+  await loadWebhook();
   return true;
 }
+async function loadWebhook(){
+  const note=document.querySelector('#webhookStatus');
+  const btn=document.querySelector('#webhookBtn');
+  const r=await fetch('/api/admin/webhook/yoco',{credentials:'include'});
+  if(!r.ok){note.textContent='Could not read the webhook status.';return}
+  const s=await r.json();
+  btn.disabled=!s.ready;
+  btn.textContent=s.registration?'Re-register webhook':'Register webhook';
+  if(!s.ready){
+    note.style.color='#f0c84a';
+    note.textContent='Add YOCO_SECRET_KEY to the server environment first — the registrar needs it to talk to Yoco.';
+  }else if(s.registration){
+    note.style.color='var(--accent)';
+    note.textContent=`Registered${s.registration.mode?` (${s.registration.mode} mode)`:''} at ${s.registration.url} on ${new Date(s.registration.registeredAt).toLocaleString()}. Signature secret stored — payments credit Pro automatically.`;
+  }else if(s.secretSource==='env'){
+    note.style.color='var(--muted)';
+    note.textContent=`Verifying with YOCO_WEBHOOK_SECRET from the environment. Tap the button to have Yoco point at ${s.url} and manage the secret automatically.`;
+  }else{
+    note.style.color='#f0c84a';
+    note.textContent=`Not registered. One tap creates the subscription at ${s.url} — no portal, no copying secrets.`;
+  }
+}
+document.querySelector('#webhookBtn').onclick=async()=>{
+  const note=document.querySelector('#webhookStatus');
+  const btn=document.querySelector('#webhookBtn');
+  btn.disabled=true;
+  const label=btn.textContent;
+  btn.textContent='Registering…';
+  note.style.color='var(--muted)';
+  note.textContent='Talking to Yoco…';
+  try{
+    const r=await fetch('/api/admin/webhook/yoco',{method:'POST',credentials:'include'});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||'Yoco said no. Try again.');
+    await loadWebhook();
+    if(data.warning){
+      note.textContent+=` ${data.warning}`;
+    }
+  }catch(err){
+    note.style.color='var(--danger)';
+    note.textContent=err.message;
+  }finally{
+    btn.disabled=false;
+    if(btn.textContent==='Registering…')btn.textContent=label;
+  }
+};
 function format(currency,amount){
   try{return new Intl.NumberFormat('en',{style:'currency',currency}).format(amount/100)}catch{return `${amount} ${currency}`}
 }
