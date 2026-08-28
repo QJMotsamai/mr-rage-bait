@@ -55,6 +55,11 @@ const ALLOWED_TYPES = new Set([
   'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ]);
 const loginAttempts = new Map();
+// A guest identity is just a cookie the client controls: drop it and you get
+// a brand-new id with a full allowance. The per-guest cap on its own is not a
+// ceiling, so signed-out traffic also gets a per-IP ceiling.
+const guestIpUsage = new Map();
+const GUEST_IP_DAILY = Number(process.env.GUEST_IP_DAILY_MESSAGES || 30);
 const TONES = {
   soft: 'TONE: SOFT. Be genuinely warm and helpful. At most one light, affectionate tease per reply, and only if it fits. No insults, no disdain, no sarcasm about the user. Think of a friend who is fond of them.',
   medium: 'TONE: MEDIUM. Answer properly, then add one dry, witty aside. Amused rather than annoyed. Never harsh.',
@@ -339,6 +344,12 @@ app.post('/api/billing/checkout', async (req, res) => {
 
 app.post('/api/chat', upload.single('file'), async (req, res) => {
   const user = auth.currentUser(req);
+  if (!user && tooManyGuestMessages(req)) {
+    return res.status(429).json({
+      error: `This network has used its ${GUEST_IP_DAILY} guest messages for today. Create a free account for ${FREE_DAILY} a day, or go Pro for unlimited.`,
+      code: 'ip_quota'
+    });
+  }
   const guest = auth.guestId(req, res);
   const ownerKey = user ? user.id : guest;
   const usage = usageFor(user, guest);
@@ -414,6 +425,12 @@ The intro must be one sentence, dry and impatient, and must not reveal any of th
 
 app.post('/api/game', async (req, res) => {
   const user = auth.currentUser(req);
+  if (!user && tooManyGuestMessages(req)) {
+    return res.status(429).json({
+      error: `This network has used its ${GUEST_IP_DAILY} guest messages for today. Create a free account for ${FREE_DAILY} a day, or go Pro for unlimited.`,
+      code: 'ip_quota'
+    });
+  }
   const guest = auth.guestId(req, res);
   const ownerKey = user ? user.id : guest;
   const type = req.body?.type === 'riddle' ? 'riddle' : 'balloon';
@@ -594,6 +611,29 @@ function tooManyLogins(req) {
   row.count += 1;
   loginAttempts.set(ip, row);
   return row.count > 20;
+}
+
+function guestIpKey(req) {
+  const ip = req.ip || req.headers['x-forwarded-for'] || 'local';
+  return `${ip}:${new Date().toISOString().slice(0, 10)}`;
+}
+
+/**
+ * Per-IP daily ceiling for signed-out traffic only. Signed-in users are
+ * unaffected, so shared networks (campus, office, carrier NAT) never get
+ * punished for one another.
+ */
+function tooManyGuestMessages(req) {
+  const key = guestIpKey(req);
+  const count = (guestIpUsage.get(key) || 0) + 1;
+  guestIpUsage.set(key, count);
+  if (guestIpUsage.size > 5000) {
+    const today = new Date().toISOString().slice(0, 10);
+    for (const entry of guestIpUsage.keys()) {
+      if (!entry.endsWith(today)) guestIpUsage.delete(entry);
+    }
+  }
+  return count > GUEST_IP_DAILY;
 }
 
 async function handleYocoEvent(event) {
