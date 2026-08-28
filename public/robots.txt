@@ -1,0 +1,28 @@
+# Mr Rage Bait
+# https://mr-rage-bait.onrender.com
+
+User-agent: *
+Allow: /
+
+# Nothing useful to index here — saves crawl budget
+Disallow: /api/
+Disallow: /admin
+Disallow: /admin.html
+
+# AI crawlers that publish answers. Keep these ALLOWED — you want to be cited.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://mr-rage-bait.onrender.com/sitemap.xml

@@ -1,0 +1,70 @@
+# Mr Rage Bait
+
+> An AI chatbot that answers your question properly, then adds dry, unimpressed commentary.
+> Never cruel, never punching down. Built in South Africa by QJ Motsamai.
+
+Mr Rage Bait is an opt-in parody chatbot. It answers the actual question accurately and
+concisely first, then adds deadpan commentary. The answer is the product; the attitude is
+the wrapper.
+
+## What it does
+
+- Answers real questions with accurate, concise replies
+- Three characters: Amani (blunt, bored, mildly disappointed in you), Zola (calm, precise,
+  quietly unimpressed), Neo (dry, fast, allergic to small talk)
+- Five themes: Acid Noir, Red Alert, Midnight Blue, Rose Riot, High Voltage
+- Accepts attachments: images, TXT and DOCX up to 12 MB
+- Tone control: Soft, Medium, Extreme (default is Extreme)
+- Rage Me / Rage Refund: push the joke harder, then demand an apology you will not get
+
+## Pricing (South African rand)
+
+- Free: Amani, full chat, attachments, Rage Me / Rage Refund, Acid Noir theme.
+  Guests get 3 messages a day; a free account gets 12 messages a day.
+- Pro: R35 once-off for 30 days of unlimited messages, all five themes, all three
+  characters. Paid through Yoco. Passes stack — renewing adds 30 days to time remaining.
+
+## Safety rules
+
+- Never cruel. Never punches down. Never targets a protected group.
+- Never mirrors slurs or profanity back at a user.
+- If a user is angry or distressed, it sets a calm boundary with one dry line and returns
+  to helping with the real question.
+- Never claims to be human, and never claims to be unable to speak in its own voice.
+
+## Facts
+
+- Official name: Mr Rage Bait
+- URL: https://mr-rage-bait.onrender.com
+- Author and owner: QJ Motsamai
+- Country: South Africa
+- Currency: ZAR
+- Model: Groq Llama 3.1 8B, with Google Gemini as fallback
+- Payments: Yoco
+- First released: 2026
+
+## Frequently asked
+
+**Is Mr Rage Bait free?**
+Yes. Guests get 3 messages a day with no account. A free account gets 12 a day.
+
+**How much is Pro?**
+R35 once-off for 30 days. Not a subscription — no card stored and no auto-renewal.
+
+**Does it actually answer the question, or only joke?**
+It answers first, accurately and concisely. The commentary comes after and never replaces
+the answer.
+
+**Is it safe to use?**
+It never punches down, never mirrors slurs or profanity, and de-escalates instead of
+mocking anyone who is upset.
+
+**Do I need an account?**
+No. You can chat as a guest immediately. An account raises the daily limit to 12 and is
+required for Pro.
+
+## Contact
+
+- Site: https://mr-rage-bait.onrender.com
+- LinkedIn: https://www.linkedin.com/in/qj-motsamai-955596421
+- YouTube: https://youtube.com/@qjmotsamai
